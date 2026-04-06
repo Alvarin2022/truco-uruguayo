@@ -2,245 +2,324 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#2A6099"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Truco UY"/>
   <title>Truco Uruguayo — Anotador</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icon-192.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --celeste: #5B9BD5;
       --celeste-dark: #2A6099;
       --celeste-light: #D6E8F8;
+      --celeste-bg: #EBF4FC;
       --gold: #C8960C;
-      --gold-light: #F5C518;
       --white: #FAFAFA;
-      --cream: #F5F0E8;
       --text: #1a1a1a;
-      --text-muted: #555;
+      --text-muted: #666;
+      --sep: #CBD5E1;
       --malas-bg: #7F1D1D;
       --malas-text: #FCA5A5;
       --buenas-bg: #14532D;
       --buenas-text: #86EFAC;
-      --sep: #CBD5E1;
+      --danger: #DC2626;
     }
-
+    html { touch-action: manipulation; }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--celeste-light);
+      background: var(--celeste-bg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== HEADER / BANDERA ===== */
+    /* ===== HEADER ===== */
     header {
       width: 100%;
       background: var(--white);
-      border-bottom: 3px solid var(--celeste);
-      padding: 0;
-      overflow: hidden;
+      border-bottom: 2px solid var(--celeste);
     }
-
-    .bandera {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .franja {
-      width: 100%;
-      height: 14px;
-    }
-
-    .franja:nth-child(odd)  { background: var(--celeste); }
-    .franja:nth-child(even) { background: var(--white); }
-
     .header-content {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 18px;
-      padding: 18px 24px 10px;
+      gap: 14px;
+      padding: 14px 20px 10px;
       background: var(--white);
-      position: relative;
     }
-
-    .sol-uru {
-      width: 64px;
-      height: 64px;
-      flex-shrink: 0;
-    }
-
+    .sol-uru { width: 54px; height: 54px; flex-shrink: 0; }
     .header-text h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 26px;
+      font-size: 22px;
       color: var(--celeste-dark);
       line-height: 1.1;
     }
-
     .header-text p {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-top: 3px;
+      margin-top: 2px;
     }
+    .bandera { width: 100%; display: flex; flex-direction: column; }
+    .franja { width: 100%; height: 10px; }
+    .franja:nth-child(odd)  { background: var(--celeste); }
+    .franja:nth-child(even) { background: var(--white); }
 
     /* ===== TABS ===== */
     .tabs {
       display: flex;
-      gap: 0;
       background: var(--white);
       border-bottom: 2px solid var(--celeste-light);
       width: 100%;
       justify-content: center;
-      padding: 0 16px;
+      overflow-x: auto;
     }
-
     .tab-btn {
       background: transparent;
       border: none;
       border-bottom: 3px solid transparent;
-      padding: 12px 28px;
-      font-size: 13px;
+      padding: 11px 16px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       transition: color 0.2s, border-color 0.2s;
       margin-bottom: -2px;
-      letter-spacing: 0.5px;
+      white-space: nowrap;
+      touch-action: manipulation;
     }
-
-    .tab-btn.active {
-      color: var(--celeste-dark);
-      border-bottom-color: var(--celeste-dark);
-    }
-
+    .tab-btn.active { color: var(--celeste-dark); border-bottom-color: var(--celeste-dark); }
     .tab-btn:hover:not(.active) { color: var(--celeste); }
 
-    /* ===== MAIN CONTENT ===== */
-    main { width: 100%; max-width: 620px; padding: 20px 12px 40px; }
-
+    /* ===== MAIN ===== */
+    main { width: 100%; max-width: 640px; padding: 16px 10px 40px; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ===== SCOREBOARD ===== */
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 380px;
+    }
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--celeste-dark);
+      margin-bottom: 16px;
+    }
+    .modal label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+    .modal input {
+      width: 100%;
+      border: 1.5px solid var(--celeste);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+    }
+    .modal input:focus { border-color: var(--celeste-dark); }
+    .modal-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+    .modal-sep {
+      height: 1px;
+      background: var(--celeste-light);
+      margin: 16px 0 4px;
+    }
+    .pts-options {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .pts-opt {
+      flex: 1;
+      border: 1.5px solid var(--celeste);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--celeste-dark);
+      background: var(--white);
+      transition: all 0.15s;
+      touch-action: manipulation;
+    }
+    .pts-opt.selected { background: var(--celeste-dark); color: #fff; border-color: var(--celeste-dark); }
+    .pts-opt span { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; opacity: 0.8; }
+
+    /* ===== ANOTADOR ===== */
+    .game-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+    .timer-display {
+      background: var(--white);
+      border: 1.5px solid var(--celeste);
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--celeste-dark);
+      min-width: 90px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .timer-controls { display: flex; gap: 6px; }
+    .btn-sm {
+      background: var(--white);
+      border: 1.5px solid var(--celeste);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--celeste-dark);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      touch-action: manipulation;
+      transition: background 0.15s;
+    }
+    .btn-sm:hover { background: var(--celeste-light); }
+    .btn-sm.danger { color: var(--danger); border-color: var(--danger); }
+    .btn-sm.danger:hover { background: #FEE2E2; }
+
+    .winner-banner {
+      background: var(--celeste-dark);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .winner-banner.show { display: block; }
+
     .boards-row {
       display: grid;
-      grid-template-columns: 1fr 40px 1fr;
-      gap: 8px;
+      grid-template-columns: 1fr 36px 1fr;
+      gap: 6px;
       align-items: start;
     }
-
     .board-card {
       background: var(--white);
       border: 1.5px solid var(--celeste);
       border-radius: 14px;
-      padding: 14px 10px 16px;
+      padding: 12px 8px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 2px 8px rgba(91,155,213,0.10);
+      gap: 8px;
     }
-
-    .team-label {
+    .team-label-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .team-name {
       font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-size: 17px;
       color: var(--celeste-dark);
       text-align: center;
+      line-height: 1.2;
     }
-
+    .edit-icon { font-size: 12px; color: var(--celeste); opacity: 0.7; }
     .score-num {
       font-family: 'Playfair Display', serif;
-      font-size: 48px;
+      font-size: 44px;
       color: var(--text);
       line-height: 1;
-      min-width: 60px;
       text-align: center;
     }
-
     .section-badge {
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 2px;
       text-transform: uppercase;
       text-align: center;
-      padding: 3px 10px;
+      padding: 3px 8px;
       border-radius: 20px;
       font-weight: 600;
     }
-
     .malas-badge { background: var(--malas-bg); color: var(--malas-text); }
     .buenas-badge { background: var(--buenas-bg); color: var(--buenas-text); }
 
-    .tally-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 100%;
-    }
+    .tally-grid { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+    .tally-row { display: flex; gap: 2px; justify-content: center; align-items: center; height: 30px; }
+    .section-sep { width: 90%; height: 1px; background: var(--sep); margin: 1px 0; }
 
-    .tally-row {
-      display: flex;
-      gap: 2px;
-      justify-content: center;
-      align-items: center;
-      height: 26px;
-    }
-
-    .tally-box {
-      width: 24px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .section-sep {
-      width: 90%;
-      height: 1px;
-      background: var(--sep);
-      margin: 2px 0;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      width: 100%;
-    }
-
+    .btn-row { display: flex; gap: 5px; justify-content: center; width: 100%; }
     .btn-add {
       background: var(--celeste-dark);
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 9px 12px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s;
+      touch-action: manipulation;
+      user-select: none;
     }
-
     .btn-add:hover { background: var(--celeste); }
-    .btn-add:active { transform: scale(0.96); }
-
     .btn-sub {
       background: transparent;
       color: var(--celeste-dark);
       border: 1.5px solid var(--celeste);
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 9px 10px;
       font-size: 13px;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       transition: background 0.15s;
+      touch-action: manipulation;
+      user-select: none;
     }
-
     .btn-sub:hover { background: var(--celeste-light); }
 
     .center-col {
@@ -248,49 +327,123 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding-top: 70px;
+      gap: 10px;
+      padding-top: 60px;
     }
-
     .vs-text {
       font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-size: 18px;
       color: var(--celeste);
-      font-weight: 700;
     }
-
-    .btn-reset {
+    .btn-vertical {
       background: transparent;
       border: 1.5px solid var(--celeste);
       color: var(--celeste-dark);
       border-radius: 8px;
-      padding: 7px 10px;
-      font-size: 10px;
+      padding: 8px 6px;
+      font-size: 9px;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       letter-spacing: 1px;
       text-transform: uppercase;
-      transition: background 0.15s;
       writing-mode: vertical-rl;
-      text-orientation: mixed;
+      touch-action: manipulation;
+      transition: background 0.15s;
     }
+    .btn-vertical:hover { background: var(--celeste-light); }
 
-    .btn-reset:hover { background: var(--celeste-light); }
-
-    .winner-banner {
+    /* ===== HISTORIAL ===== */
+    .hist-empty {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px 20px;
+      font-size: 14px;
+    }
+    .hist-card {
+      background: var(--white);
+      border: 1px solid var(--celeste-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .hist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .hist-teams {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--celeste-dark);
+    }
+    .hist-date { font-size: 11px; color: var(--text-muted); }
+    .hist-scores {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .hist-score-item { display: flex; flex-direction: column; gap: 2px; }
+    .hist-score-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .hist-score-val { font-size: 20px; font-family: 'Playfair Display', serif; color: var(--text); }
+    .hist-winner-badge {
+      font-size: 10px;
       background: var(--celeste-dark);
       color: #fff;
-      border-radius: 12px;
-      padding: 14px 24px;
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      text-align: center;
-      width: 100%;
-      margin-top: 14px;
-      display: none;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 4px;
+      display: inline-block;
     }
+    .hist-duration { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
 
-    .winner-banner.show { display: block; }
+    /* ===== RANKING ===== */
+    .ranking-card {
+      background: var(--white);
+      border: 1px solid var(--celeste-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rank-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--celeste-light);
+      min-width: 30px;
+      text-align: center;
+    }
+    .rank-num.top1 { color: #C8960C; }
+    .rank-num.top2 { color: #9CA3AF; }
+    .rank-num.top3 { color: #CD7F32; }
+    .rank-info { flex: 1; }
+    .rank-name { font-size: 15px; font-weight: 600; color: var(--text); }
+    .rank-stats { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .rank-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--celeste-dark);
+    }
+    .rank-bar-wrap {
+      height: 4px;
+      background: var(--celeste-light);
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+    .rank-bar {
+      height: 4px;
+      background: var(--celeste-dark);
+      border-radius: 4px;
+      transition: width 0.4s;
+    }
+    .ranking-empty {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px 20px;
+      font-size: 14px;
+    }
 
     /* ===== REGLAMENTO ===== */
     .regla-search {
@@ -302,142 +455,145 @@
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background: var(--white);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       outline: none;
+      touch-action: manipulation;
     }
-
     .regla-search:focus { border-color: var(--celeste-dark); }
-
     .regla-section {
       background: var(--white);
       border: 1px solid var(--celeste-light);
       border-radius: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
-
     .regla-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 13px 16px;
+      padding: 12px 14px;
       cursor: pointer;
       background: var(--white);
       transition: background 0.15s;
+      touch-action: manipulation;
     }
-
     .regla-header:hover { background: var(--celeste-light); }
-
-    .regla-header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .regla-header-left { display: flex; align-items: center; gap: 10px; }
     .regla-icon {
-      width: 28px;
-      height: 28px;
+      width: 26px; height: 26px;
       background: var(--celeste-light);
       border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
     }
-
-    .regla-title {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--celeste-dark);
-    }
-
-    .regla-chevron {
-      font-size: 12px;
-      color: var(--celeste);
-      transition: transform 0.2s;
-    }
-
+    .regla-title { font-weight: 600; font-size: 13px; color: var(--celeste-dark); }
+    .regla-chevron { font-size: 11px; color: var(--celeste); transition: transform 0.2s; }
     .regla-chevron.open { transform: rotate(180deg); }
-
-    .regla-body {
-      display: none;
-      padding: 0 16px 16px;
-      border-top: 1px solid var(--celeste-light);
-    }
-
+    .regla-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--celeste-light); }
     .regla-body.open { display: block; }
-
-    .regla-body p {
-      font-size: 13.5px;
-      color: var(--text);
-      line-height: 1.75;
-      margin-top: 12px;
-    }
-
-    .regla-body ul {
-      margin-top: 10px;
-      padding-left: 18px;
-    }
-
-    .regla-body li {
-      font-size: 13.5px;
-      color: var(--text);
-      line-height: 1.75;
-      margin-bottom: 4px;
-    }
-
+    .regla-body p { font-size: 13px; color: var(--text); line-height: 1.75; margin-top: 10px; }
+    .regla-body ul { margin-top: 8px; padding-left: 16px; }
+    .regla-body li { font-size: 13px; color: var(--text); line-height: 1.75; margin-bottom: 3px; }
     .regla-body strong { color: var(--celeste-dark); }
-
-    .tag {
-      display: inline-block;
-      background: var(--celeste-light);
-      color: var(--celeste-dark);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 20px;
-      margin-right: 4px;
-      margin-bottom: 4px;
-    }
-
-    .tag-pts {
-      background: #FEF9C3;
-      color: #713F12;
-    }
-
-    .no-results {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 14px;
-      padding: 32px 0;
-      display: none;
-    }
+    .tag { display: inline-block; background: var(--celeste-light); color: var(--celeste-dark); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 20px; margin-right: 3px; margin-bottom: 3px; }
+    .tag-pts { background: #FEF9C3; color: #713F12; }
+    .no-results { text-align: center; color: var(--text-muted); font-size: 14px; padding: 32px 0; display: none; }
 
     /* ===== FOOTER ===== */
     footer {
       width: 100%;
       text-align: center;
-      padding: 12px;
-      font-size: 11px;
+      padding: 10px;
+      font-size: 10px;
       color: var(--text-muted);
       letter-spacing: 1px;
       border-top: 1px solid var(--celeste-light);
       background: var(--white);
       margin-top: auto;
     }
+
+    /* ===== BUTTONS GENERAL ===== */
+    .btn-primary {
+      background: var(--celeste-dark);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s;
+      touch-action: manipulation;
+    }
+    .btn-primary:hover { background: var(--celeste); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid var(--sep);
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s;
+      touch-action: manipulation;
+    }
+    .btn-ghost:hover { background: var(--celeste-light); }
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1.5px solid var(--danger);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      touch-action: manipulation;
+    }
   </style>
 </head>
 <body>
 
+<!-- MODAL nueva partida -->
+<div class="modal-overlay" id="modal-nueva">
+  <div class="modal">
+    <h2>Nueva partida</h2>
+    <label>Nombre equipo 1</label>
+    <input type="text" id="inp-team1" placeholder="Ej: Los Pibes" maxlength="20"/>
+    <label>Nombre equipo 2</label>
+    <input type="text" id="inp-team2" placeholder="Ej: Los Viejos" maxlength="20"/>
+    <div class="modal-sep"></div>
+    <label>Partido a</label>
+    <div class="pts-options">
+      <div class="pts-opt selected" data-pts="30" onclick="selectPts(30, this)">30 ptos <span>Clásico</span></div>
+      <div class="pts-opt" data-pts="40" onclick="selectPts(40, this)">40 ptos <span>Largo</span></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-primary" onclick="confirmarNuevaPartida()">Jugar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL editar nombre equipo -->
+<div class="modal-overlay" id="modal-edit-team">
+  <div class="modal">
+    <h2>Editar equipo</h2>
+    <label>Nombre del equipo</label>
+    <input type="text" id="inp-edit-team" maxlength="20"/>
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="cerrarModalEdit()">Cancelar</button>
+      <button class="btn-primary" onclick="confirmarEditTeam()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="header-content">
-    <!-- Sol de Mayo Uruguay -->
     <svg class="sol-uru" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <circle cx="32" cy="32" r="14" fill="#C8960C"/>
-      <!-- rayos alternados largos y cortos -->
       <g stroke="#C8960C" stroke-linecap="round">
-        <!-- rayos largos -->
         <line x1="32" y1="4"  x2="32" y2="13" stroke-width="3"/>
         <line x1="32" y1="51" x2="32" y2="60" stroke-width="3"/>
         <line x1="4"  y1="32" x2="13" y2="32" stroke-width="3"/>
@@ -446,7 +602,6 @@
         <line x1="46" y1="46"   x2="52.5" y2="52.5" stroke-width="3"/>
         <line x1="52.5" y1="11.5" x2="46" y2="18" stroke-width="3"/>
         <line x1="18" y1="46"   x2="11.5" y2="52.5" stroke-width="3"/>
-        <!-- rayos cortos (intermedios) -->
         <line x1="32" y1="7"  x2="32" y2="11" stroke-width="1.5" transform="rotate(22.5 32 32)"/>
         <line x1="32" y1="7"  x2="32" y2="11" stroke-width="1.5" transform="rotate(67.5 32 32)"/>
         <line x1="32" y1="7"  x2="32" y2="11" stroke-width="1.5" transform="rotate(112.5 32 32)"/>
@@ -456,7 +611,6 @@
         <line x1="32" y1="7"  x2="32" y2="11" stroke-width="1.5" transform="rotate(292.5 32 32)"/>
         <line x1="32" y1="7"  x2="32" y2="11" stroke-width="1.5" transform="rotate(337.5 32 32)"/>
       </g>
-      <!-- cara del sol -->
       <circle cx="27" cy="29" r="2" fill="#fff"/>
       <circle cx="37" cy="29" r="2" fill="#fff"/>
       <path d="M26 36 Q32 41 38 36" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
@@ -465,35 +619,45 @@
     </svg>
     <div class="header-text">
       <h1>Truco Uruguayo</h1>
-      <p>Anotador — 30 puntos</p>
+      <p>Anotador oficial</p>
     </div>
   </div>
-  <!-- Franjas celestes y blancas de la bandera -->
   <div class="bandera">
-    <div class="franja"></div>
-    <div class="franja"></div>
-    <div class="franja"></div>
-    <div class="franja"></div>
-    <div class="franja"></div>
-    <div class="franja"></div>
+    <div class="franja"></div><div class="franja"></div>
+    <div class="franja"></div><div class="franja"></div>
+    <div class="franja"></div><div class="franja"></div>
   </div>
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('anotador', this)">Anotador</button>
-  <button class="tab-btn" onclick="switchTab('reglamento', this)">Reglamento</button>
+  <button class="tab-btn active" onclick="switchTab('anotador',this)">Anotador</button>
+  <button class="tab-btn" onclick="switchTab('historial',this)">Historial</button>
+  <button class="tab-btn" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab-btn" onclick="switchTab('reglamento',this)">Reglamento</button>
 </div>
 
 <main>
 
-  <!-- === ANOTADOR === -->
+  <!-- ===== ANOTADOR ===== -->
   <div class="tab-panel active" id="tab-anotador">
 
-    <div class="winner-banner" id="winner-banner">Ganaron!</div>
+    <div class="game-topbar">
+      <div class="timer-display" id="timer-display">00:00</div>
+      <div class="timer-controls">
+        <button class="btn-sm" id="btn-timer" onclick="toggleTimer()">Iniciar</button>
+        <button class="btn-sm" onclick="resetTimer()">Reset</button>
+        <button class="btn-sm danger" onclick="abrirNuevaPartida()">+ Nueva</button>
+      </div>
+    </div>
+
+    <div class="winner-banner" id="winner-banner"></div>
 
     <div class="boards-row">
       <div class="board-card">
-        <div class="team-label">Nosotros</div>
+        <div class="team-label-row" onclick="editarEquipo('nos')">
+          <div class="team-name" id="team-nos-name">Nosotros</div>
+          <div class="edit-icon">✏️</div>
+        </div>
         <div class="score-num" id="score-nos">0</div>
         <div class="section-badge malas-badge">Las malas</div>
         <div class="tally-grid" id="tally-nos-malas"></div>
@@ -501,18 +665,21 @@
         <div class="section-badge buenas-badge">Las buenas</div>
         <div class="tally-grid" id="tally-nos-buenas"></div>
         <div class="btn-row">
-          <button class="btn-sub" onclick="addPoint('nos', -1)">−</button>
-          <button class="btn-add" onclick="addPoint('nos', 1)">+ Punto</button>
+          <button class="btn-sub" onclick="addPoint('nos',-1)">−</button>
+          <button class="btn-add" onclick="addPoint('nos',1)">+ Punto</button>
         </div>
       </div>
 
       <div class="center-col">
         <div class="vs-text">vs</div>
-        <button class="btn-reset" onclick="resetGame()">Reiniciar</button>
+        <button class="btn-vertical" onclick="abrirNuevaPartida()">Nueva</button>
       </div>
 
       <div class="board-card">
-        <div class="team-label">Ellos</div>
+        <div class="team-label-row" onclick="editarEquipo('ell')">
+          <div class="team-name" id="team-ell-name">Ellos</div>
+          <div class="edit-icon">✏️</div>
+        </div>
         <div class="score-num" id="score-ell">0</div>
         <div class="section-badge malas-badge">Las malas</div>
         <div class="tally-grid" id="tally-ell-malas"></div>
@@ -520,44 +687,154 @@
         <div class="section-badge buenas-badge">Las buenas</div>
         <div class="tally-grid" id="tally-ell-buenas"></div>
         <div class="btn-row">
-          <button class="btn-sub" onclick="addPoint('ell', -1)">−</button>
-          <button class="btn-add" onclick="addPoint('ell', 1)">+ Punto</button>
+          <button class="btn-sub" onclick="addPoint('ell',-1)">−</button>
+          <button class="btn-add" onclick="addPoint('ell',1)">+ Punto</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- === REGLAMENTO === -->
+  <!-- ===== HISTORIAL ===== -->
+  <div class="tab-panel" id="tab-historial">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);">Historial</div>
+      <button class="btn-danger" onclick="limpiarHistorial()">Borrar todo</button>
+    </div>
+    <div id="historial-lista"></div>
+  </div>
+
+  <!-- ===== RANKING ===== -->
+  <div class="tab-panel" id="tab-ranking">
+    <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);margin-bottom:14px;">Ranking de equipos</div>
+    <div id="ranking-lista"></div>
+  </div>
+
+  <!-- ===== REGLAMENTO ===== -->
   <div class="tab-panel" id="tab-reglamento">
-
     <input type="text" class="regla-search" id="regla-search" placeholder="Buscar regla... ej: flor, envido, muestra" oninput="filtrarReglas()"/>
-
     <div id="reglas-lista"></div>
-    <div class="no-results" id="no-results">No se encontraron reglas para esa búsqueda.</div>
+    <div class="no-results" id="no-results">No se encontraron reglas.</div>
   </div>
 
 </main>
 
-<footer>Truco Uruguayo &mdash; Hecho con orgullo oriental &bull; Reglas basadas en Wikipedia &amp; Ludoteka</footer>
+<footer>Truco Uruguayo &mdash; Hecho con orgullo oriental</footer>
 
 <script>
-/* =================== ANOTADOR =================== */
+/* ===================== ESTADO ===================== */
 let pts = { nos: 0, ell: 0 };
-const MAX = 30, HALF = 15;
+let MAX = 30, HALF = 15;
+let teamNames = { nos: 'Nosotros', ell: 'Ellos' };
+let gameActive = false;
+let editingTeam = null;
+let selectedPts = 30;
+let gameStartTime = null;
 
-function addPoint(team, delta) {
+/* ===================== TIMER ===================== */
+let timerSeconds = 0, timerRunning = false, timerInterval = null;
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  document.getElementById('timer-display').textContent = pad(m) + ':' + pad(s);
+}
+
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('btn-timer').textContent = 'Continuar';
+  } else {
+    timerRunning = true;
+    document.getElementById('btn-timer').textContent = 'Pausar';
+    timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  updateTimerDisplay();
+  document.getElementById('btn-timer').textContent = 'Iniciar';
+}
+
+function getDuration() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  if (m === 0) return s + 's';
+  return m + 'min ' + s + 's';
+}
+
+/* ===================== MODAL NUEVA PARTIDA ===================== */
+function abrirNuevaPartida() {
   const banner = document.getElementById('winner-banner');
-  if (banner.classList.contains('show') && delta > 0) return;
-  pts[team] = Math.max(0, Math.min(MAX, pts[team] + delta));
-  render();
+  if (gameActive && !banner.classList.contains('show')) {
+    if (!confirm('¿Abandonar la partida actual?')) return;
+  }
+  document.getElementById('inp-team1').value = '';
+  document.getElementById('inp-team2').value = '';
+  selectedPts = 30;
+  document.querySelectorAll('.pts-opt').forEach(el => {
+    el.classList.toggle('selected', el.dataset.pts === '30');
+  });
+  document.getElementById('modal-nueva').classList.add('open');
+  setTimeout(() => document.getElementById('inp-team1').focus(), 100);
 }
 
-function resetGame() {
+function cerrarModal() { document.getElementById('modal-nueva').classList.remove('open'); }
+
+function selectPts(n, el) {
+  selectedPts = n;
+  document.querySelectorAll('.pts-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function confirmarNuevaPartida() {
+  const t1 = document.getElementById('inp-team1').value.trim() || 'Nosotros';
+  const t2 = document.getElementById('inp-team2').value.trim() || 'Ellos';
+  teamNames.nos = t1;
+  teamNames.ell = t2;
+  MAX = selectedPts;
+  HALF = MAX / 2;
+  cerrarModal();
+  iniciarJuego();
+}
+
+function iniciarJuego() {
   pts = { nos: 0, ell: 0 };
+  gameActive = true;
+  gameStartTime = new Date();
   document.getElementById('winner-banner').classList.remove('show');
+  document.getElementById('team-nos-name').textContent = teamNames.nos;
+  document.getElementById('team-ell-name').textContent = teamNames.ell;
+  resetTimer();
+  toggleTimer();
   render();
 }
 
+/* ===================== EDITAR EQUIPO ===================== */
+function editarEquipo(team) {
+  editingTeam = team;
+  document.getElementById('inp-edit-team').value = teamNames[team];
+  document.getElementById('modal-edit-team').classList.add('open');
+  setTimeout(() => document.getElementById('inp-edit-team').focus(), 100);
+}
+
+function cerrarModalEdit() { document.getElementById('modal-edit-team').classList.remove('open'); }
+
+function confirmarEditTeam() {
+  const val = document.getElementById('inp-edit-team').value.trim();
+  if (val) {
+    teamNames[editingTeam] = val;
+    document.getElementById('team-' + editingTeam + '-name').textContent = val;
+  }
+  cerrarModalEdit();
+}
+
+/* ===================== PALITOS ===================== */
 function makeTallyRows(container, count, max) {
   container.innerHTML = '';
   const numRows = Math.ceil(max / 5);
@@ -568,32 +845,47 @@ function makeTallyRows(container, count, max) {
     rows.push(row);
     container.appendChild(row);
   }
+  let groupStart = 0;
   for (let i = 0; i < max; i++) {
     const rowIdx = Math.floor(i / 5);
     const posInGroup = i % 5;
+    if (posInGroup === 0) groupStart = i;
     const filled = i < count;
+    const groupFilled = Math.min(count - groupStart, 5);
     const wrap = document.createElement('div');
-    wrap.className = 'tally-box';
-    wrap.innerHTML = makePalit(posInGroup, filled);
+    wrap.style.cssText = 'width:28px;height:30px;display:flex;align-items:center;justify-content:center;position:relative;';
+    wrap.innerHTML = makePalit(posInGroup, filled, groupFilled, groupStart);
     rows[rowIdx].appendChild(wrap);
   }
 }
 
-function makePalit(pos, filled) {
-  const stroke = filled ? '#2A6099' : '#CBD5E1';
-  const w = 22, h = 26;
-  if (pos < 4) {
-    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-      <line x1="11" y1="2" x2="11" y2="24" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round"/>
-    </svg>`;
-  } else {
-    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-      <line x1="2" y1="2" x2="20" y2="24" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round"/>
+function makePalit(pos, filled, groupFilled, groupStart) {
+  const active = '#2A6099';
+  const inactive = '#CBD5E1';
+  const w = 28, h = 30;
+
+  if (pos === 0) {
+    const c1 = filled ? active : inactive;
+    const c2 = groupFilled >= 2 ? active : inactive;
+    const c3 = groupFilled >= 3 ? active : inactive;
+    const c4 = groupFilled >= 4 ? active : inactive;
+    const cD = groupFilled >= 5 ? active : inactive;
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="overflow:visible">
+      <line x1="5" y1="2" x2="5" y2="28" stroke="${c1}" stroke-width="2" stroke-linecap="round"/>
+      <line x1="11" y1="2" x2="11" y2="28" stroke="${c2}" stroke-width="2" stroke-linecap="round"/>
+      <line x1="17" y1="2" x2="17" y2="28" stroke="${c3}" stroke-width="2" stroke-linecap="round"/>
+      <line x1="23" y1="2" x2="23" y2="28" stroke="${c4}" stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="27" x2="27" y2="3" stroke="${cD}" stroke-width="2" stroke-linecap="round"/>
     </svg>`;
   }
+  return '';
 }
 
+/* ===================== RENDER ===================== */
 function render() {
+  document.getElementById('team-nos-name').textContent = teamNames.nos;
+  document.getElementById('team-ell-name').textContent = teamNames.ell;
+
   for (const team of ['nos', 'ell']) {
     const p = pts[team];
     document.getElementById('score-' + team).textContent = p;
@@ -602,203 +894,162 @@ function render() {
     makeTallyRows(document.getElementById('tally-' + team + '-malas'), malasPts, HALF);
     makeTallyRows(document.getElementById('tally-' + team + '-buenas'), buenasPts, HALF);
   }
+
   const banner = document.getElementById('winner-banner');
-  if (pts.nos >= MAX && pts.ell >= MAX) {
-    banner.textContent = 'Empate — vuelvan a jugar!';
+  if (pts.nos >= MAX || pts.ell >= MAX) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('btn-timer').textContent = 'Iniciar';
+    let winner = null;
+    if (pts.nos >= MAX && pts.ell >= MAX) {
+      banner.textContent = 'Empate — vuelvan a jugar!';
+      winner = 'Empate';
+    } else if (pts.nos >= MAX) {
+      banner.textContent = '¡Ganaron ' + teamNames.nos + '!';
+      winner = teamNames.nos;
+    } else {
+      banner.textContent = '¡Ganaron ' + teamNames.ell + '!';
+      winner = teamNames.ell;
+    }
     banner.classList.add('show');
-  } else if (pts.nos >= MAX) {
-    banner.textContent = '¡Ganaron Nosotros! ¡Arriba!';
-    banner.classList.add('show');
-  } else if (pts.ell >= MAX) {
-    banner.textContent = '¡Ganaron Ellos! ¡La revancha!';
-    banner.classList.add('show');
+    if (gameActive) {
+      guardarPartida(winner);
+      gameActive = false;
+    }
   } else {
     banner.classList.remove('show');
   }
 }
 
-render();
+/* ===================== PUNTOS ===================== */
+function addPoint(team, delta) {
+  const banner = document.getElementById('winner-banner');
+  if (banner.classList.contains('show') && delta > 0) return;
+  pts[team] = Math.max(0, Math.min(MAX, pts[team] + delta));
+  render();
+}
 
-/* =================== TABS =================== */
+/* ===================== HISTORIAL ===================== */
+function guardarPartida(winner) {
+  const hist = JSON.parse(localStorage.getItem('truco_hist') || '[]');
+  hist.unshift({
+    team1: teamNames.nos,
+    team2: teamNames.ell,
+    pts1: pts.nos,
+    pts2: pts.ell,
+    max: MAX,
+    winner: winner,
+    duration: getDuration(),
+    date: new Date().toLocaleDateString('es-UY', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+  });
+  localStorage.setItem('truco_hist', JSON.stringify(hist.slice(0, 100)));
+  renderHistorial();
+  renderRanking();
+}
+
+function renderHistorial() {
+  const hist = JSON.parse(localStorage.getItem('truco_hist') || '[]');
+  const cont = document.getElementById('historial-lista');
+  if (hist.length === 0) {
+    cont.innerHTML = '<div class="hist-empty">Todavía no hay partidas registradas.<br>¡Jugá una partida para ver el historial!</div>';
+    return;
+  }
+  cont.innerHTML = hist.map(p => `
+    <div class="hist-card">
+      <div class="hist-header">
+        <div class="hist-teams">${p.team1} vs ${p.team2}</div>
+        <div class="hist-date">${p.date}</div>
+      </div>
+      <div class="hist-scores">
+        <div class="hist-score-item">
+          <div class="hist-score-label">${p.team1}</div>
+          <div class="hist-score-val">${p.pts1}</div>
+          ${p.winner === p.team1 ? '<div class="hist-winner-badge">Ganador</div>' : ''}
+        </div>
+        <div style="font-size:20px;color:var(--sep);align-self:center;">—</div>
+        <div class="hist-score-item">
+          <div class="hist-score-label">${p.team2}</div>
+          <div class="hist-score-val">${p.pts2}</div>
+          ${p.winner === p.team2 ? '<div class="hist-winner-badge">Ganador</div>' : ''}
+        </div>
+      </div>
+      <div class="hist-duration">Duración: ${p.duration} &bull; A ${p.max} puntos</div>
+    </div>
+  `).join('');
+}
+
+function limpiarHistorial() {
+  if (!confirm('¿Borrar todo el historial? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem('truco_hist');
+  renderHistorial();
+  renderRanking();
+}
+
+/* ===================== RANKING ===================== */
+function renderRanking() {
+  const hist = JSON.parse(localStorage.getItem('truco_hist') || '[]');
+  const cont = document.getElementById('ranking-lista');
+
+  const teams = {};
+  hist.forEach(p => {
+    [p.team1, p.team2].forEach(t => {
+      if (!teams[t]) teams[t] = { wins: 0, games: 0 };
+      teams[t].games++;
+    });
+    if (p.winner && p.winner !== 'Empate') {
+      if (!teams[p.winner]) teams[p.winner] = { wins: 0, games: 0 };
+      teams[p.winner].wins++;
+    }
+  });
+
+  const sorted = Object.entries(teams)
+    .map(([name, s]) => ({ name, ...s, pct: s.games > 0 ? Math.round((s.wins / s.games) * 100) : 0 }))
+    .sort((a, b) => b.pct - a.pct || b.wins - a.wins);
+
+  if (sorted.length === 0) {
+    cont.innerHTML = '<div class="ranking-empty">El ranking aparece después de la primera partida.</div>';
+    return;
+  }
+
+  const maxPct = sorted[0].pct || 1;
+  cont.innerHTML = sorted.map((t, i) => `
+    <div class="ranking-card">
+      <div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="rank-info">
+        <div class="rank-name">${t.name}</div>
+        <div class="rank-stats">${t.wins} victorias de ${t.games} partidas</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round((t.pct/maxPct)*100)}%"></div></div>
+      </div>
+      <div class="rank-pct">${t.pct}%</div>
+    </div>
+  `).join('');
+}
+
+/* ===================== TABS ===================== */
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
+  if (id === 'historial') renderHistorial();
+  if (id === 'ranking') renderRanking();
+  if (id === 'reglamento') renderReglas(REGLAS);
 }
 
-/* =================== REGLAMENTO =================== */
+/* ===================== REGLAMENTO ===================== */
 const REGLAS = [
-  {
-    icon: '🃏',
-    titulo: 'El mazo y la muestra',
-    tags: ['baraja', 'muestra', 'base'],
-    contenido: `
-      <p>Se juega con la <strong>baraja española de 40 cartas</strong>, sin ochos, nueves ni comodines. Cada jugador recibe <strong>3 cartas</strong> al inicio de cada mano.</p>
-      <p>Al terminar el reparto, se levanta una carta del mazo y se coloca boca arriba: esa es <strong>la muestra</strong>. El palo de la muestra define cuáles son las <em>piezas</em> de esa mano, las cartas más poderosas.</p>
-      <p>La muestra se coloca parcialmente bajo el mazo, apuntando al jugador de la derecha, que es quien <strong>empieza a jugar</strong>.</p>
-    `
-  },
-  {
-    icon: '👑',
-    titulo: 'Las piezas — jerarquía de cartas',
-    tags: ['piezas', 'jerarquía', 'muestra', 'valor'],
-    contenido: `
-      <p>Las <strong>piezas</strong> son las cartas del palo de la muestra, y son las más fuertes del juego. En orden de mayor a menor valor:</p>
-      <ul>
-        <li><strong>2 de la muestra</strong> — la más alta (vale 30 en envido)</li>
-        <li><strong>4 de la muestra</strong> — segunda (vale 29)</li>
-        <li><strong>5 de la muestra</strong> — tercera (vale 28)</li>
-        <li><strong>Caballo (11) de la muestra</strong> — cuarta (vale 27)</li>
-        <li><strong>Sota (10) de la muestra</strong> — quinta (vale 27)</li>
-      </ul>
-      <p>Si alguna de esas cartas <em>es</em> la muestra, el <strong>Rey (12)</strong> del mismo palo ocupa su lugar.</p>
-      <p>Por debajo de las piezas están las <em>matas</em>: el 3, el 2 (no muestra), el 1 de espada, el 1 de basto, y el 7 de espada/oros según corresponda.</p>
-    `
-  },
-  {
-    icon: '⚔️',
-    titulo: 'El truco — cómo se juega',
-    tags: ['truco', 'bazas', 'manos', 'rondas'],
-    contenido: `
-      <p>Cada mano se disputa en <strong>hasta 3 rondas</strong> (bazas). En cada baza, los jugadores tiran una carta y gana quien tire la más alta según la jerarquía.</p>
-      <p>El equipo que gana <strong>2 de 3 rondas</strong> gana la mano y se lleva los puntos del truco.</p>
-      <ul>
-        <li>Si hay empate en una baza (<em>baza parda</em>), gana quien haya ganado la baza anterior.</li>
-        <li>Si las 3 bazas son pardas, gana <strong>quien tiene la mano</strong>.</li>
-        <li>Si un equipo gana las primeras 2 bazas, la tercera no se juega.</li>
-        <li>Un jugador puede <strong>irse al mazo</strong> si no quiere disputar la mano.</li>
-      </ul>
-    `
-  },
-  {
-    icon: '📣',
-    titulo: 'Las apuestas del truco',
-    tags: ['truco', 'retruco', 'vale 4', 'apuestas', 'puntos'],
-    contenido: `
-      <p>Durante la mano, cualquier jugador puede subir la apuesta. El rival puede <strong>aceptar (quiero)</strong> o <strong>rechazar (no quiero)</strong>.</p>
-      <ul>
-        <li><span class="tag tag-pts">1 pto</span> Ganar la mano sin apostar</li>
-        <li><span class="tag tag-pts">2 ptos</span> <strong>Truco</strong> — el primero que canta "truco"</li>
-        <li><span class="tag tag-pts">3 ptos</span> <strong>Retruco</strong> — el rival sube la apuesta</li>
-        <li><span class="tag tag-pts">4 ptos</span> <strong>Vale 4</strong> — la apuesta máxima del truco</li>
-      </ul>
-      <p>Si alguien dice "no quiero", el que cantó gana los puntos del nivel anterior.</p>
-    `
-  },
-  {
-    icon: '✋',
-    titulo: 'El envido',
-    tags: ['envido', 'real envido', 'falta envido', 'puntos', 'apuestas'],
-    contenido: `
-      <p>El envido se canta <strong>antes de tirar la primera carta</strong>. Gana quien tenga el mayor puntaje sumando sus cartas.</p>
-      <p><strong>Cómo se calcula el puntaje de envido:</strong></p>
-      <ul>
-        <li>Si tenés una pieza: su valor (30, 29, 28, 27...) + la carta más alta que no sea negra.</li>
-        <li>Si no tenés piezas: 20 puntos + las dos cartas más altas del mismo palo.</li>
-        <li>Las <em>negras</em> (10, 11, 12 que no son muestra) valen 0.</li>
-      </ul>
-      <p><strong>Tipos de envido:</strong></p>
-      <ul>
-        <li><span class="tag tag-pts">2 ptos</span> <strong>Envido</strong></li>
-        <li><span class="tag tag-pts">3 ptos</span> <strong>Real Envido</strong></li>
-        <li><span class="tag tag-pts">Variable</span> <strong>Falta Envido</strong> — vale los puntos que le faltan al equipo que va primero para terminar el chico</li>
-      </ul>
-      <p>Se puede escalar: Envido → Real Envido → Falta Envido. Si alguien tiene Flor, el envido queda anulado.</p>
-    `
-  },
-  {
-    icon: '🌸',
-    titulo: 'La flor',
-    tags: ['flor', 'contra flor', 'piezas', 'puntos'],
-    contenido: `
-      <p>Tenés <strong>Flor</strong> cuando tu mano cumple alguna de estas condiciones:</p>
-      <ul>
-        <li>Dos o más piezas (cartas de la muestra)</li>
-        <li>Una pieza y dos cartas del mismo palo</li>
-        <li>Tres cartas del mismo palo (<em>flor derecha</em>)</li>
-      </ul>
-      <p>Si tenés flor, <strong>debés</strong> cantarla al llegar tu turno. La flor anula el envido de esa mano.</p>
-      <p><strong>Puntaje de la flor:</strong> se suma el valor completo de la pieza más alta, más las <em>unidades</em> de las demás piezas. La flor máxima es <strong>47</strong> (2 + 4 + 5 de la muestra: 30+9+8).</p>
-      <ul>
-        <li><span class="tag tag-pts">3 ptos</span> <strong>Flor</strong> (si el rival no tiene flor)</li>
-        <li>Si ambos tienen flor: se comparan los valores y se pueden hacer apuestas adicionales (<strong>Con flor envido / Con flor envido la falta</strong>).</li>
-      </ul>
-    `
-  },
-  {
-    icon: '🏆',
-    titulo: 'Puntaje general y el chico',
-    tags: ['puntos', 'malas', 'buenas', 'chico', 'partido'],
-    contenido: `
-      <p>Una partida llega hasta <strong>30 puntos</strong> (un <em>chico</em>). Los puntos se dividen en dos etapas bien diferenciadas:</p>
-      <ul>
-        <li><strong>Las malas</strong>: del punto 1 al 15. Mientras un equipo no llega a 15, está "en malas".</li>
-        <li><strong>Las buenas</strong>: del punto 16 al 30. Al pasar los 15, el equipo entra a "las buenas".</li>
-      </ul>
-      <p>El primer equipo en llegar a <strong>30 puntos</strong> gana el chico.</p>
-      <p>La <strong>Falta Envido</strong> vale los puntos que le faltan al equipo que está más cerca de cerrar el chico.</p>
-    `
-  },
-  {
-    icon: '👥',
-    titulo: 'Jugadores y equipos',
-    tags: ['jugadores', 'equipos', 'parejas', 'mano'],
-    contenido: `
-      <p>El truco uruguayo se puede jugar de <strong>2, 4 o 6 jugadores</strong>, siempre en dos equipos. Los jugadores de cada equipo se sientan de forma intercalada.</p>
-      <p>En el juego de 6, la primera parte de cada equipo (<em>redondillas</em>) es de 3 contra 3. Al llegar a la mitad de los puntos, se pasa al <em>pico a pico</em> (1 contra 1), donde la Falta Envido vale 6 puntos y la Contra Flor al Resto vale 12.</p>
-      <p>Las cartas se reparten en sentido <strong>antihorario</strong>. El turno para cantar y jugar empieza en quien tiene <em>la mano</em> (el jugador a la derecha del que reparte).</p>
-    `
-  },
-  {
-    icon: '👁️',
-    titulo: 'Las señas — comunicación entre compañeros',
-    tags: ['señas', 'compañero', 'estrategia', 'comunicación'],
-    contenido: `
-      <p>En el truco uruguayo es habitual que los compañeros se <strong>hagan señas</strong> para indicar las cartas que tienen, sin que el equipo rival se entere.</p>
-      <p>Algunas señas comunes (pueden variar por región o grupo):</p>
-      <ul>
-        <li><strong>Cerrar los ojos</strong> — mano mala, sin cartas con seña</li>
-        <li>Gestos con la boca, ceja o nariz — piezas o matas específicas</li>
-      </ul>
-      <p>Como las señas varían con la muestra, hay que acordar el sistema con el compañero antes de jugar. También se puede hacer una <strong>seña falsa</strong> para engañar al rival — esto es parte de la estrategia.</p>
-      <p>La habilidad para leer y enviar señas correctamente es uno de los elementos que hace al truco uruguayo tan rico y apasionante.</p>
-    `
-  },
-  {
-    icon: '📐',
-    titulo: 'La primera baza — "la pri vale oro"',
-    tags: ['primera', 'pri', 'bazas', 'estrategia'],
-    contenido: `
-      <p>Ganar la primera baza (la "pri") tiene un valor estratégico especial:</p>
-      <ul>
-        <li>Si ganás la primera baza y la segunda es parda (<em>empate</em>), <strong>ganás el truco</strong>.</li>
-        <li>Si ganás la primera y perdés la segunda, la tercera baza decide todo.</li>
-        <li>De ahí viene la expresión: <strong>"la pri vale oro"</strong>.</li>
-      </ul>
-      <p>También: si vas perdiendo y empatás la segunda baza, ganás el truco si habías ganado la primera.</p>
-    `
-  },
-  {
-    icon: '🎭',
-    titulo: 'El engaño — mentir y farolear',
-    tags: ['engaño', 'farol', 'estrategia', 'mentir'],
-    contenido: `
-      <p>En el truco se puede <strong>mentir sobre las apuestas</strong>: podés cantar "Truco" aunque tengas cartas malas, para presionar al rival a que rechace. Esto se llama <em>farolear</em>.</p>
-      <p>Sin embargo, hay una excepción importante: <strong>la Flor no se puede mentir</strong>. Si cantás Flor y al mostrar las cartas no la tenés, perdés los puntos automáticamente.</p>
-      <p>El engaño, la lectura del rival y la coordinación con el compañero son las claves que hacen del truco uruguayo un juego profundo y apasionante.</p>
-    `
-  },
-  {
-    icon: '📜',
-    titulo: 'Historia del truco uruguayo',
-    tags: ['historia', 'origen', 'cultura', 'uruguay'],
-    contenido: `
-      <p>El truco uruguayo tiene raíces en el <strong>truc balear</strong> (Islas Baleares, España), traído por inmigrantes y soldados en los siglos XVIII y XIX. Con el tiempo adquirió características propias que lo diferencian del truco argentino, chileno y venezolano.</p>
-      <p>Se convirtió en juego de <strong>gauchos, bares y pulperías</strong>, y fue protagonista en episodios históricos como el Éxodo del Pueblo Oriental y las asambleas artiguistas.</p>
-      <p>Hoy es uno de los juegos de naipes más populares de Uruguay, presente en comedores estudiantiles, clubes y reuniones familiares. Se han realizado campeonatos nacionales, como el organizado por la firma Dunbar.</p>
-    `
-  }
+  { icon:'🃏', titulo:'El mazo y la muestra', tags:['baraja','muestra','base'], contenido:`<p>Se juega con la <strong>baraja española de 40 cartas</strong>, sin ochos, nueves ni comodines. Cada jugador recibe <strong>3 cartas</strong> al inicio de cada mano.</p><p>Al terminar el reparto, se levanta una carta del mazo y se coloca boca arriba: esa es <strong>la muestra</strong>. El palo de la muestra define cuáles son las <em>piezas</em>, las cartas más poderosas de esa mano.</p>` },
+  { icon:'👑', titulo:'Las piezas — jerarquía de cartas', tags:['piezas','jerarquía','muestra','valor'], contenido:`<p>Las <strong>piezas</strong> son las cartas del palo de la muestra. En orden de mayor a menor:</p><ul><li><strong>2 de la muestra</strong> — la más alta (vale 30 en envido)</li><li><strong>4 de la muestra</strong> — segunda (29)</li><li><strong>5 de la muestra</strong> — tercera (28)</li><li><strong>Caballo (11)</strong> de la muestra (27)</li><li><strong>Sota (10)</strong> de la muestra (27)</li></ul><p>Si alguna de esas cartas es la muestra misma, el <strong>Rey (12)</strong> del mismo palo ocupa su lugar.</p>` },
+  { icon:'⚔️', titulo:'El truco — cómo se juega', tags:['truco','bazas','manos','rondas'], contenido:`<p>Cada mano se disputa en <strong>hasta 3 rondas</strong>. En cada ronda los jugadores tiran una carta y gana quien tire la más alta.</p><ul><li>El equipo que gana <strong>2 de 3 rondas</strong> gana la mano.</li><li>Baza parda (empate): gana quien ganó la baza anterior.</li><li>Si las 3 bazas son pardas, gana <strong>quien tiene la mano</strong>.</li><li>Un jugador puede <strong>irse al mazo</strong> si sus cartas son malas.</li></ul>` },
+  { icon:'📣', titulo:'Apuestas del truco', tags:['truco','retruco','vale 4','apuestas','puntos'], contenido:`<ul><li><span class="tag tag-pts">1 pto</span> Ganar sin apostar</li><li><span class="tag tag-pts">2 ptos</span> <strong>Truco</strong></li><li><span class="tag tag-pts">3 ptos</span> <strong>Retruco</strong></li><li><span class="tag tag-pts">4 ptos</span> <strong>Vale 4</strong></li></ul><p>El rival puede aceptar (<em>quiero</em>) o rechazar (<em>no quiero</em>). Si rechaza, el que cantó gana los puntos del nivel anterior.</p>` },
+  { icon:'✋', titulo:'El envido', tags:['envido','real envido','falta envido','puntos'], contenido:`<p>Se canta <strong>antes de tirar la primera carta</strong>. Gana quien tenga el mayor puntaje.</p><p><strong>Cómo calcular:</strong> con una pieza: su valor + la carta más alta no negra. Sin piezas: 20 + las dos cartas más altas del mismo palo. Las <em>negras</em> (10, 11, 12 que no son muestra) valen 0.</p><ul><li><span class="tag tag-pts">2 ptos</span> <strong>Envido</strong></li><li><span class="tag tag-pts">3 ptos</span> <strong>Real Envido</strong></li><li><span class="tag tag-pts">Variable</span> <strong>Falta Envido</strong> — los puntos que faltan para cerrar el chico</li></ul>` },
+  { icon:'🌸', titulo:'La flor', tags:['flor','contra flor','piezas','puntos'], contenido:`<p>Tenés <strong>Flor</strong> cuando tenés: dos o más piezas; una pieza y dos cartas del mismo palo; o tres cartas del mismo palo (<em>flor derecha</em>).</p><p>Si tenés flor <strong>debés</strong> cantarla. La flor anula el envido.</p><p>Flor máxima: <strong>47 puntos</strong> (2+4+5 de la muestra: 30+9+8).</p><ul><li><span class="tag tag-pts">3 ptos</span> Flor sin disputa</li><li>Si ambos tienen flor: se comparan y se pueden hacer apuestas adicionales.</li></ul>` },
+  { icon:'🏆', titulo:'Puntaje — malas y buenas', tags:['puntos','malas','buenas','chico','partido'], contenido:`<p>Una partida llega a <strong>30 o 40 puntos</strong> según lo acordado. Los puntos se dividen en dos etapas:</p><ul><li><strong>Las malas</strong>: primera mitad. Estar en malas es desventaja psicológica.</li><li><strong>Las buenas</strong>: segunda mitad. El equipo que llega aquí está cerca de ganar.</li></ul><p>La <strong>Falta Envido</strong> vale los puntos que le faltan al equipo más cercano de cerrar el chico.</p>` },
+  { icon:'👥', titulo:'Jugadores y equipos', tags:['jugadores','equipos','parejas','mano'], contenido:`<p>Se juega de <strong>2, 4 o 6 jugadores</strong> en dos equipos intercalados. Las cartas se reparten en sentido <strong>antihorario</strong>. El turno empieza en quien tiene <em>la mano</em> (a la derecha del que reparte).</p><p>En el juego de 6: primero se juegan <em>redondillas</em> (3 vs 3). Al llegar a la mitad de los puntos se pasa al <em>pico a pico</em> (1 vs 1).</p>` },
+  { icon:'👁️', titulo:'Las señas', tags:['señas','compañero','estrategia'], contenido:`<p>Los compañeros se hacen <strong>señas</strong> para indicar sus cartas sin que el rival lo note. Las señas varían por región y grupo; hay que acordarlas antes de jugar.</p><p>Seña común: <strong>cerrar los ojos</strong> = mano mala. También se pueden hacer <strong>señas falsas</strong> para engañar al rival.</p>` },
+  { icon:'📐', titulo:'La pri vale oro', tags:['primera','pri','bazas','estrategia'], contenido:`<p>Ganar la primera baza tiene valor estratégico clave:</p><ul><li>Si ganás la primera y la segunda es parda → <strong>ganás el truco</strong>.</li><li>Si ganás la primera, perdés la segunda → la tercera decide.</li></ul><p>De ahí la expresión clásica: <strong>"la pri vale oro"</strong>.</p>` },
+  { icon:'🎭', titulo:'El farol — mentir en el truco', tags:['engaño','farol','estrategia','mentir'], contenido:`<p>En el truco se puede mentir sobre las apuestas: podés cantar "Truco" con cartas malas para presionar al rival. Esto se llama <strong>farolear</strong>.</p><p><strong>Excepción:</strong> la Flor no se puede mentir. Si cantás Flor y no la tenés, perdés los puntos automáticamente.</p>` },
+  { icon:'📜', titulo:'Historia del truco uruguayo', tags:['historia','origen','cultura','uruguay'], contenido:`<p>El truco uruguayo tiene raíces en el <strong>truc balear</strong>, traído por inmigrantes en los siglos XVIII y XIX. Se convirtió en juego de gauchos, bares y pulperías, presente en episodios históricos como el Éxodo del Pueblo Oriental.</p><p>Hoy es uno de los juegos más populares de Uruguay. Se han organizado campeonatos nacionales, como el de la firma Dunbar.</p>` }
 ];
 
 function renderReglas(lista) {
@@ -807,35 +1058,25 @@ function renderReglas(lista) {
   cont.innerHTML = '';
   if (lista.length === 0) { noRes.style.display = 'block'; return; }
   noRes.style.display = 'none';
-  lista.forEach((r, idx) => {
+  lista.forEach(r => {
     const sec = document.createElement('div');
     sec.className = 'regla-section';
-    sec.innerHTML = `
-      <div class="regla-header" onclick="toggleRegla(this)">
-        <div class="regla-header-left">
-          <div class="regla-icon">${r.icon}</div>
-          <div class="regla-title">${r.titulo}</div>
-        </div>
-        <div class="regla-chevron">▼</div>
-      </div>
-      <div class="regla-body">${r.contenido}</div>
-    `;
+    sec.innerHTML = `<div class="regla-header" onclick="toggleRegla(this)"><div class="regla-header-left"><div class="regla-icon">${r.icon}</div><div class="regla-title">${r.titulo}</div></div><div class="regla-chevron">▼</div></div><div class="regla-body">${r.contenido}</div>`;
     cont.appendChild(sec);
   });
 }
 
 function toggleRegla(header) {
   const body = header.nextElementSibling;
-  const chevron = header.querySelector('.regla-chevron');
+  const ch = header.querySelector('.regla-chevron');
   const isOpen = body.classList.contains('open');
   body.classList.toggle('open', !isOpen);
-  chevron.classList.toggle('open', !isOpen);
+  ch.classList.toggle('open', !isOpen);
 }
 
 function filtrarReglas() {
   const q = document.getElementById('regla-search').value.toLowerCase().trim();
-  if (!q) { renderReglas(REGLAS); return; }
-  const filtradas = REGLAS.filter(r =>
+  const filtradas = !q ? REGLAS : REGLAS.filter(r =>
     r.titulo.toLowerCase().includes(q) ||
     r.tags.some(t => t.includes(q)) ||
     r.contenido.toLowerCase().includes(q)
@@ -843,7 +1084,15 @@ function filtrarReglas() {
   renderReglas(filtradas);
 }
 
-renderReglas(REGLAS);
+/* ===================== SERVICE WORKER ===================== */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+/* ===================== INIT ===================== */
+render();
+renderHistorial();
+renderRanking();
 </script>
 </body>
 </html>
