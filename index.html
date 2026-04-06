@@ -14,88 +14,90 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --celeste: #5B9BD5; --celeste-dark: #2A6099; --celeste-light: #D6E8F8;
-      --celeste-bg: #EBF4FC; --white: #FAFAFA; --text: #1a1a1a; --text-muted: #666;
-      --sep: #CBD5E1; --malas-bg: #7F1D1D; --malas-text: #FCA5A5;
-      --buenas-bg: #14532D; --buenas-text: #86EFAC; --danger: #DC2626;
+      --celeste:#5B9BD5; --celeste-dark:#2A6099; --celeste-light:#D6E8F8;
+      --celeste-bg:#EBF4FC; --white:#FAFAFA; --text:#1a1a1a; --text-muted:#666;
+      --sep:#CBD5E1; --malas-bg:#7F1D1D; --malas-text:#FCA5A5;
+      --buenas-bg:#14532D; --buenas-text:#86EFAC; --danger:#DC2626;
     }
-    html { touch-action: manipulation; }
+    html { touch-action:manipulation; }
     body { font-family:'Inter',sans-serif; background:var(--celeste-bg); min-height:100vh; display:flex; flex-direction:column; align-items:center; -webkit-tap-highlight-color:transparent; }
     header { width:100%; background:var(--white); border-bottom:2px solid var(--celeste); }
-    .header-content { display:flex; align-items:center; justify-content:center; gap:14px; padding:14px 20px 10px; }
-    .sol-uru { width:54px; height:54px; flex-shrink:0; }
-    .header-text h1 { font-family:'Playfair Display',serif; font-size:22px; color:var(--celeste-dark); line-height:1.1; }
-    .header-text p { font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+    .header-content { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 8px; }
+    .header-left { display:flex; align-items:center; gap:12px; }
+    .sol-uru { width:46px; height:46px; flex-shrink:0; }
+    .header-text h1 { font-family:'Playfair Display',serif; font-size:19px; color:var(--celeste-dark); line-height:1.1; }
+    .header-text p { font-size:10px; color:var(--text-muted); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
     .bandera { width:100%; display:flex; flex-direction:column; }
-    .franja { width:100%; height:10px; }
+    .franja { width:100%; height:8px; }
     .franja:nth-child(odd) { background:var(--celeste); }
     .franja:nth-child(even) { background:var(--white); }
+    .user-badge { display:flex; align-items:center; gap:8px; cursor:pointer; touch-action:manipulation; }
+    .user-avatar { width:34px; height:34px; border-radius:50%; background:var(--celeste-dark); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#fff; flex-shrink:0; }
+    .user-name-short { font-size:11px; color:var(--text-muted); max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .btn-login-header { background:var(--celeste-dark); color:#fff; border:none; border-radius:8px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
     .tabs { display:flex; background:var(--white); border-bottom:2px solid var(--celeste-light); width:100%; justify-content:center; overflow-x:auto; }
-    .tab-btn { background:transparent; border:none; border-bottom:3px solid transparent; padding:11px 16px; font-size:12px; font-weight:500; color:var(--text-muted); cursor:pointer; font-family:'Inter',sans-serif; transition:color 0.2s,border-color 0.2s; margin-bottom:-2px; white-space:nowrap; touch-action:manipulation; }
+    .tab-btn { background:transparent; border:none; border-bottom:3px solid transparent; padding:10px 13px; font-size:11px; font-weight:500; color:var(--text-muted); cursor:pointer; font-family:'Inter',sans-serif; transition:color 0.2s,border-color 0.2s; margin-bottom:-2px; white-space:nowrap; touch-action:manipulation; }
     .tab-btn.active { color:var(--celeste-dark); border-bottom-color:var(--celeste-dark); }
-    main { width:100%; max-width:640px; padding:16px 10px 40px; }
-    .tab-panel { display:none; }
-    .tab-panel.active { display:block; }
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:20px; }
+    main { width:100%; max-width:640px; padding:14px 10px 40px; }
+    .tab-panel { display:none; } .tab-panel.active { display:block; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; padding:20px; }
     .modal-overlay.open { display:flex; }
-    .modal { background:var(--white); border-radius:16px; padding:24px; width:100%; max-width:380px; }
-    .modal h2 { font-family:'Playfair Display',serif; font-size:20px; color:var(--celeste-dark); margin-bottom:16px; }
-    .modal label { display:block; font-size:12px; font-weight:600; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; margin-top:12px; }
-    .modal input { width:100%; border:1.5px solid var(--celeste); border-radius:8px; padding:9px 12px; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:var(--white); outline:none; }
+    .modal { background:var(--white); border-radius:16px; padding:24px; width:100%; max-width:380px; max-height:90vh; overflow-y:auto; }
+    .modal h2 { font-family:'Playfair Display',serif; font-size:20px; color:var(--celeste-dark); margin-bottom:4px; }
+    .modal-sub { font-size:12px; color:var(--text-muted); margin-bottom:18px; }
+    .modal label { display:block; font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; margin-top:14px; }
+    .modal input { width:100%; border:1.5px solid var(--celeste); border-radius:8px; padding:10px 12px; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:var(--white); outline:none; }
     .modal input:focus { border-color:var(--celeste-dark); }
     .modal-btns { display:flex; gap:8px; margin-top:20px; justify-content:flex-end; }
     .modal-sep { height:1px; background:var(--celeste-light); margin:16px 0 4px; }
+    .modal-error { background:#FEE2E2; color:#991B1B; border-radius:8px; padding:10px 12px; font-size:13px; margin-top:12px; display:none; }
+    .modal-error.show { display:block; }
+    .modal-switch { text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted); }
+    .modal-switch a { color:var(--celeste-dark); font-weight:600; cursor:pointer; }
     .pts-options { display:flex; gap:8px; margin-top:6px; }
     .pts-opt { flex:1; border:1.5px solid var(--celeste); border-radius:8px; padding:10px; text-align:center; cursor:pointer; font-size:14px; font-weight:600; color:var(--celeste-dark); background:var(--white); transition:all 0.15s; touch-action:manipulation; }
     .pts-opt span { display:block; font-size:10px; font-weight:400; margin-top:2px; opacity:0.8; }
     .pts-opt.selected { background:var(--celeste-dark); color:#fff; border-color:var(--celeste-dark); }
-    .abandon-modal-body p { font-size:14px; color:var(--text-muted); margin-bottom:16px; line-height:1.5; }
     .abandon-btn-falta { width:100%; padding:12px; border-radius:10px; border:none; background:#FEF3C7; color:#92400E; font-size:14px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; margin-bottom:10px; touch-action:manipulation; }
-    .abandon-btn-falta:hover { background:#FDE68A; }
     .abandon-btn-contra { width:100%; padding:12px; border-radius:10px; border:none; background:#EDE9FE; color:#4C1D95; font-size:14px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; margin-bottom:10px; touch-action:manipulation; }
-    .abandon-btn-contra:hover { background:#DDD6FE; }
     .abandon-cancel { width:100%; padding:10px; border-radius:10px; border:1.5px solid var(--sep); background:transparent; color:var(--text-muted); font-size:13px; font-family:'Inter',sans-serif; cursor:pointer; }
-    .game-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:8px; }
-    .timer-display { background:var(--white); border:1.5px solid var(--celeste); border-radius:10px; padding:6px 14px; font-family:'Playfair Display',serif; font-size:22px; color:var(--celeste-dark); min-width:90px; text-align:center; letter-spacing:1px; }
-    .timer-controls { display:flex; gap:6px; }
-    .btn-sm { background:var(--white); border:1.5px solid var(--celeste); border-radius:8px; padding:6px 12px; font-size:12px; color:var(--celeste-dark); cursor:pointer; font-family:'Inter',sans-serif; font-weight:500; touch-action:manipulation; }
+    .game-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:6px; flex-wrap:wrap; }
+    .timer-display { background:var(--white); border:1.5px solid var(--celeste); border-radius:10px; padding:6px 12px; font-family:'Playfair Display',serif; font-size:20px; color:var(--celeste-dark); min-width:82px; text-align:center; letter-spacing:1px; }
+    .timer-controls { display:flex; gap:5px; }
+    .btn-sm { background:var(--white); border:1.5px solid var(--celeste); border-radius:8px; padding:6px 10px; font-size:11px; color:var(--celeste-dark); cursor:pointer; font-family:'Inter',sans-serif; font-weight:500; touch-action:manipulation; }
     .btn-sm:hover { background:var(--celeste-light); }
     .btn-sm.danger { color:var(--danger); border-color:var(--danger); }
-    .btn-sm.danger:hover { background:#FEE2E2; }
-    .winner-banner { border-radius:12px; padding:12px 20px; font-family:'Playfair Display',serif; font-size:17px; text-align:center; width:100%; margin-bottom:12px; display:none; line-height:1.4; }
+    .winner-banner { border-radius:12px; padding:12px 16px; font-family:'Playfair Display',serif; font-size:16px; text-align:center; width:100%; margin-bottom:10px; display:none; line-height:1.4; }
     .winner-banner.show { display:block; }
     .winner-banner.win { background:var(--celeste-dark); color:#fff; }
     .winner-banner.abandon-falta { background:#FEF3C7; color:#92400E; }
     .winner-banner.abandon-contra { background:#EDE9FE; color:#4C1D95; }
-    .boards-row { display:grid; grid-template-columns:1fr 36px 1fr; gap:6px; align-items:start; }
-    .board-card { background:var(--white); border:1.5px solid var(--celeste); border-radius:14px; padding:10px 7px 12px; display:flex; flex-direction:column; align-items:center; gap:7px; }
-    .team-label-row { display:flex; align-items:center; gap:5px; cursor:pointer; touch-action:manipulation; }
-    .team-name { font-family:'Playfair Display',serif; font-size:16px; color:var(--celeste-dark); text-align:center; line-height:1.2; }
-    .edit-icon { font-size:11px; color:var(--celeste); opacity:0.7; }
-    .score-num { font-family:'Playfair Display',serif; font-size:42px; color:var(--text); line-height:1; text-align:center; }
-    .section-badge { font-size:9px; letter-spacing:2px; text-transform:uppercase; text-align:center; padding:3px 8px; border-radius:20px; font-weight:600; }
+    .boards-row { display:grid; grid-template-columns:1fr 32px 1fr; gap:5px; align-items:start; }
+    .board-card { background:var(--white); border:1.5px solid var(--celeste); border-radius:14px; padding:10px 6px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .team-label-row { display:flex; align-items:center; gap:4px; cursor:pointer; touch-action:manipulation; }
+    .team-name { font-family:'Playfair Display',serif; font-size:15px; color:var(--celeste-dark); text-align:center; line-height:1.2; }
+    .edit-icon { font-size:10px; color:var(--celeste); opacity:0.7; }
+    .score-num { font-family:'Playfair Display',serif; font-size:40px; color:var(--text); line-height:1; text-align:center; }
+    .section-badge { font-size:8px; letter-spacing:2px; text-transform:uppercase; text-align:center; padding:2px 7px; border-radius:20px; font-weight:600; }
     .malas-badge { background:var(--malas-bg); color:var(--malas-text); }
     .buenas-badge { background:var(--buenas-bg); color:var(--buenas-text); }
-    .tally-grid { display:flex; flex-direction:column; gap:4px; width:100%; }
-    .tally-row { display:flex; gap:3px; justify-content:center; align-items:center; min-height:34px; }
+    .tally-grid { display:flex; flex-direction:column; gap:3px; width:100%; }
+    .tally-row { display:flex; gap:2px; justify-content:center; align-items:center; min-height:32px; }
     .section-sep { width:90%; height:1px; background:var(--sep); margin:1px 0; }
     .btn-row { display:flex; gap:4px; justify-content:center; width:100%; }
     .btn-add { background:var(--celeste-dark); color:#fff; border:none; border-radius:8px; padding:8px 10px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; user-select:none; }
     .btn-add:hover { background:var(--celeste); }
     .btn-sub { background:transparent; color:var(--celeste-dark); border:1.5px solid var(--celeste); border-radius:8px; padding:8px 9px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; user-select:none; }
     .btn-sub:hover { background:var(--celeste-light); }
-    .btn-abandon-falta { background:#FEF3C7; color:#92400E; border:none; border-radius:8px; padding:6px 8px; font-size:10px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; width:100%; margin-top:2px; }
-    .btn-abandon-falta:hover { background:#FDE68A; }
-    .btn-abandon-contra { background:#EDE9FE; color:#4C1D95; border:none; border-radius:8px; padding:6px 8px; font-size:10px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; width:100%; margin-top:2px; }
-    .btn-abandon-contra:hover { background:#DDD6FE; }
-    .center-col { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding-top:55px; }
-    .vs-text { font-family:'Playfair Display',serif; font-size:18px; color:var(--celeste); }
-    .btn-vertical { background:transparent; border:1.5px solid var(--celeste); color:var(--celeste-dark); border-radius:8px; padding:8px 6px; font-size:9px; cursor:pointer; font-family:'Inter',sans-serif; letter-spacing:1px; text-transform:uppercase; writing-mode:vertical-rl; touch-action:manipulation; }
-    .btn-vertical:hover { background:var(--celeste-light); }
-    .hist-empty { text-align:center; color:var(--text-muted); padding:40px 20px; font-size:14px; }
+    .btn-abandon-falta { background:#FEF3C7; color:#92400E; border:none; border-radius:8px; padding:5px 6px; font-size:9px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; width:100%; margin-top:2px; line-height:1.3; }
+    .btn-abandon-contra { background:#EDE9FE; color:#4C1D95; border:none; border-radius:8px; padding:5px 6px; font-size:9px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; width:100%; margin-top:2px; line-height:1.3; }
+    .center-col { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding-top:50px; }
+    .vs-text { font-family:'Playfair Display',serif; font-size:16px; color:var(--celeste); }
+    .btn-vertical { background:transparent; border:1.5px solid var(--celeste); color:var(--celeste-dark); border-radius:8px; padding:8px 5px; font-size:8px; cursor:pointer; font-family:'Inter',sans-serif; letter-spacing:1px; text-transform:uppercase; writing-mode:vertical-rl; touch-action:manipulation; }
+    .hist-empty { text-align:center; color:var(--text-muted); padding:40px 20px; font-size:14px; line-height:1.8; }
     .hist-card { background:var(--white); border:1px solid var(--celeste-light); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
     .hist-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
-    .hist-teams { font-family:'Playfair Display',serif; font-size:16px; color:var(--celeste-dark); }
+    .hist-teams { font-family:'Playfair Display',serif; font-size:15px; color:var(--celeste-dark); }
     .hist-date { font-size:11px; color:var(--text-muted); }
     .hist-scores { display:flex; gap:12px; align-items:flex-end; }
     .hist-score-item { display:flex; flex-direction:column; gap:2px; }
@@ -105,16 +107,26 @@
     .hist-abandon-badge-falta { font-size:10px; background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:20px; margin-top:4px; display:inline-block; }
     .hist-abandon-badge-contra { font-size:10px; background:#EDE9FE; color:#4C1D95; padding:2px 8px; border-radius:20px; margin-top:4px; display:inline-block; }
     .hist-meta { font-size:11px; color:var(--text-muted); margin-top:8px; }
+    .cloud-badge { font-size:10px; background:var(--celeste-light); color:var(--celeste-dark); padding:2px 7px; border-radius:20px; margin-left:6px; }
     .ranking-card { background:var(--white); border:1px solid var(--celeste-light); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:14px; }
     .rank-num { font-family:'Playfair Display',serif; font-size:24px; color:var(--celeste-light); min-width:30px; text-align:center; }
     .rank-num.top1 { color:#C8960C; } .rank-num.top2 { color:#9CA3AF; } .rank-num.top3 { color:#CD7F32; }
-    .rank-info { flex:1; }
-    .rank-name { font-size:15px; font-weight:600; color:var(--text); }
+    .rank-info { flex:1; } .rank-name { font-size:15px; font-weight:600; color:var(--text); }
     .rank-stats { font-size:12px; color:var(--text-muted); margin-top:2px; }
     .rank-pct { font-family:'Playfair Display',serif; font-size:22px; color:var(--celeste-dark); }
     .rank-bar-wrap { height:4px; background:var(--celeste-light); border-radius:4px; margin-top:6px; }
     .rank-bar { height:4px; background:var(--celeste-dark); border-radius:4px; }
-    .ranking-empty { text-align:center; color:var(--text-muted); padding:40px 20px; font-size:14px; }
+    .ranking-empty { text-align:center; color:var(--text-muted); padding:40px 20px; font-size:14px; line-height:1.8; }
+    .perfil-card { background:var(--white); border:1.5px solid var(--celeste); border-radius:14px; padding:20px; margin-bottom:14px; }
+    .perfil-avatar { width:64px; height:64px; border-radius:50%; background:var(--celeste-dark); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700; color:#fff; margin:0 auto 12px; }
+    .perfil-nombre { font-family:'Playfair Display',serif; font-size:22px; color:var(--celeste-dark); text-align:center; }
+    .perfil-email { font-size:12px; color:var(--text-muted); text-align:center; margin-top:4px; }
+    .perfil-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:18px; }
+    .perfil-stat { background:var(--celeste-bg); border-radius:10px; padding:12px 8px; text-align:center; }
+    .perfil-stat-val { font-family:'Playfair Display',serif; font-size:26px; color:var(--celeste-dark); }
+    .perfil-stat-label { font-size:10px; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+    .perfil-not-logged { text-align:center; padding:40px 20px; }
+    .perfil-not-logged p { font-size:14px; color:var(--text-muted); margin-bottom:16px; line-height:1.7; }
     .regla-search { width:100%; border:1.5px solid var(--celeste); border-radius:8px; padding:10px 14px; font-size:14px; font-family:'Inter',sans-serif; color:var(--text); background:var(--white); margin-bottom:14px; outline:none; }
     .regla-search:focus { border-color:var(--celeste-dark); }
     .regla-section { background:var(--white); border:1px solid var(--celeste-light); border-radius:12px; margin-bottom:8px; overflow:hidden; }
@@ -134,23 +146,55 @@
     .tag { display:inline-block; background:var(--celeste-light); color:var(--celeste-dark); font-size:11px; font-weight:600; padding:2px 7px; border-radius:20px; margin-right:3px; }
     .tag-pts { background:#FEF9C3; color:#713F12; }
     .no-results { text-align:center; color:var(--text-muted); font-size:14px; padding:32px 0; display:none; }
-    .btn-primary { background:var(--celeste-dark); color:#fff; border:none; border-radius:8px; padding:9px 18px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
+    .install-step { display:flex; gap:12px; align-items:flex-start; }
+    .step-num { min-width:26px; height:26px; background:var(--celeste-dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:#fff; flex-shrink:0; }
+    .step-ok { min-width:26px; height:26px; background:#3DDC84; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+    .btn-primary { background:var(--celeste-dark); color:#fff; border:none; border-radius:8px; padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
     .btn-primary:hover { background:var(--celeste); }
-    .btn-ghost { background:transparent; color:var(--text-muted); border:1.5px solid var(--sep); border-radius:8px; padding:9px 18px; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
+    .btn-ghost { background:transparent; color:var(--text-muted); border:1.5px solid var(--sep); border-radius:8px; padding:10px 18px; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
     .btn-ghost:hover { background:var(--celeste-light); }
-    .btn-danger { background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:8px; padding:7px 14px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
+    .btn-danger-outline { background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:8px; padding:7px 14px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; touch-action:manipulation; }
+    .btn-loading { opacity:0.7; pointer-events:none; }
     footer { width:100%; text-align:center; padding:10px; font-size:10px; color:var(--text-muted); letter-spacing:1px; border-top:1px solid var(--celeste-light); background:var(--white); margin-top:auto; }
   </style>
 </head>
 <body>
 
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal">
+    <div id="auth-login-view">
+      <h2>Iniciar sesión</h2>
+      <p class="modal-sub">Tu historial y ranking se guardan en la nube</p>
+      <label>Email</label><input type="email" id="auth-email" placeholder="tu@email.com" autocomplete="email"/>
+      <label>Contraseña</label><input type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password"/>
+      <div class="modal-error" id="auth-error"></div>
+      <div class="modal-btns">
+        <button class="btn-ghost" onclick="cerrarModal('modal-auth')">Cancelar</button>
+        <button class="btn-primary" id="btn-do-login" onclick="doLogin()">Entrar</button>
+      </div>
+      <div class="modal-switch">¿No tenés cuenta? <a onclick="switchAuthView('register')">Registrate gratis</a></div>
+    </div>
+    <div id="auth-register-view" style="display:none;">
+      <h2>Crear cuenta</h2>
+      <p class="modal-sub">Gratis, sin publicidad</p>
+      <label>Nombre (aparece en el ranking)</label><input type="text" id="reg-nombre" placeholder="Tu nombre o apodo" maxlength="24" autocomplete="nickname"/>
+      <label>Email</label><input type="email" id="reg-email" placeholder="tu@email.com" autocomplete="email"/>
+      <label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" autocomplete="new-password"/>
+      <div class="modal-error" id="reg-error"></div>
+      <div class="modal-btns">
+        <button class="btn-ghost" onclick="cerrarModal('modal-auth')">Cancelar</button>
+        <button class="btn-primary" id="btn-do-reg" onclick="doRegister()">Crear cuenta</button>
+      </div>
+      <div class="modal-switch">¿Ya tenés cuenta? <a onclick="switchAuthView('login')">Iniciá sesión</a></div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-nueva">
   <div class="modal">
     <h2>Nueva partida</h2>
-    <label>Nombre equipo 1</label>
-    <input type="text" id="inp-team1" placeholder="Ej: Los Pibes" maxlength="20"/>
-    <label>Nombre equipo 2</label>
-    <input type="text" id="inp-team2" placeholder="Ej: Los Viejos" maxlength="20"/>
+    <label>Nombre equipo 1</label><input type="text" id="inp-team1" placeholder="Ej: Los Pibes" maxlength="20"/>
+    <label>Nombre equipo 2</label><input type="text" id="inp-team2" placeholder="Ej: Los Viejos" maxlength="20"/>
     <div class="modal-sep"></div>
     <label>Partido a</label>
     <div class="pts-options">
@@ -167,8 +211,7 @@
 <div class="modal-overlay" id="modal-edit-team">
   <div class="modal">
     <h2>Editar equipo</h2>
-    <label>Nombre del equipo</label>
-    <input type="text" id="inp-edit-team" maxlength="20"/>
+    <label>Nombre del equipo</label><input type="text" id="inp-edit-team" maxlength="20"/>
     <div class="modal-btns">
       <button class="btn-ghost" onclick="cerrarModal('modal-edit-team')">Cancelar</button>
       <button class="btn-primary" onclick="confirmarEditTeam()">Guardar</button>
@@ -178,9 +221,9 @@
 
 <div class="modal-overlay" id="modal-abandon">
   <div class="modal">
-    <h2 id="abandon-title">Abandonar partida</h2>
-    <div class="abandon-modal-body">
-      <p id="abandon-desc"></p>
+    <h2 id="abandon-title">Abandonar</h2>
+    <div style="margin-top:8px;">
+      <p id="abandon-desc" style="font-size:14px;color:var(--text-muted);margin-bottom:16px;line-height:1.5;"></p>
       <button class="abandon-btn-falta" onclick="confirmarAbandono('falta')">Perdimos por la Falta Envido</button>
       <button class="abandon-btn-contra" onclick="confirmarAbandono('contraflor')">Perdimos por la Contraflor</button>
       <button class="abandon-cancel" onclick="cerrarModal('modal-abandon')">Cancelar</button>
@@ -188,37 +231,54 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-perfil-menu">
+  <div class="modal">
+    <h2 id="pm-nombre"></h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:4px;" id="pm-email"></p>
+    <div class="modal-sep"></div>
+    <div class="modal-btns" style="justify-content:space-between;">
+      <button class="btn-danger-outline" onclick="doLogout()">Cerrar sesión</button>
+      <button class="btn-ghost" onclick="cerrarModal('modal-perfil-menu')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="header-content">
-    <svg class="sol-uru" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="14" fill="#C8960C"/>
-      <g stroke="#C8960C" stroke-linecap="round">
-        <line x1="32" y1="4" x2="32" y2="13" stroke-width="3"/>
-        <line x1="32" y1="51" x2="32" y2="60" stroke-width="3"/>
-        <line x1="4" y1="32" x2="13" y2="32" stroke-width="3"/>
-        <line x1="51" y1="32" x2="60" y2="32" stroke-width="3"/>
-        <line x1="11.5" y1="11.5" x2="18" y2="18" stroke-width="3"/>
-        <line x1="46" y1="46" x2="52.5" y2="52.5" stroke-width="3"/>
-        <line x1="52.5" y1="11.5" x2="46" y2="18" stroke-width="3"/>
-        <line x1="18" y1="46" x2="11.5" y2="52.5" stroke-width="3"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(22.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(67.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(112.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(157.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(202.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(247.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(292.5 32 32)"/>
-        <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(337.5 32 32)"/>
-      </g>
-      <circle cx="27" cy="29" r="2" fill="#fff"/>
-      <circle cx="37" cy="29" r="2" fill="#fff"/>
-      <path d="M26 36 Q32 41 38 36" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M25 26 Q27 24 29 26" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
-      <path d="M35 26 Q37 24 39 26" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
-    </svg>
-    <div class="header-text">
-      <h1>Truco Uruguayo</h1>
-      <p>Anotador oficial</p>
+    <div class="header-left">
+      <svg class="sol-uru" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="14" fill="#C8960C"/>
+        <g stroke="#C8960C" stroke-linecap="round">
+          <line x1="32" y1="4" x2="32" y2="13" stroke-width="3"/>
+          <line x1="32" y1="51" x2="32" y2="60" stroke-width="3"/>
+          <line x1="4" y1="32" x2="13" y2="32" stroke-width="3"/>
+          <line x1="51" y1="32" x2="60" y2="32" stroke-width="3"/>
+          <line x1="11.5" y1="11.5" x2="18" y2="18" stroke-width="3"/>
+          <line x1="46" y1="46" x2="52.5" y2="52.5" stroke-width="3"/>
+          <line x1="52.5" y1="11.5" x2="46" y2="18" stroke-width="3"/>
+          <line x1="18" y1="46" x2="11.5" y2="52.5" stroke-width="3"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(22.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(67.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(112.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(157.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(202.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(247.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(292.5 32 32)"/>
+          <line x1="32" y1="7" x2="32" y2="11" stroke-width="1.5" transform="rotate(337.5 32 32)"/>
+        </g>
+        <circle cx="27" cy="29" r="2" fill="#fff"/>
+        <circle cx="37" cy="29" r="2" fill="#fff"/>
+        <path d="M26 36 Q32 41 38 36" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M25 26 Q27 24 29 26" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M35 26 Q37 24 39 26" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <div class="header-text">
+        <h1>Truco Uruguayo</h1>
+        <p>Anotador oficial</p>
+      </div>
+    </div>
+    <div id="header-auth-area">
+      <button class="btn-login-header" onclick="abrirAuth('login')">Ingresar</button>
     </div>
   </div>
   <div class="bandera">
@@ -232,6 +292,7 @@
   <button class="tab-btn active" onclick="switchTab('anotador',this)">Anotador</button>
   <button class="tab-btn" onclick="switchTab('historial',this)">Historial</button>
   <button class="tab-btn" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab-btn" onclick="switchTab('perfil',this)">Mi perfil</button>
   <button class="tab-btn" onclick="switchTab('reglamento',this)">Reglamento</button>
   <button class="tab-btn" onclick="switchTab('instalar',this)">Instalar</button>
 </div>
@@ -249,10 +310,7 @@
     <div class="winner-banner" id="winner-banner"></div>
     <div class="boards-row">
       <div class="board-card">
-        <div class="team-label-row" onclick="editarEquipo('nos')">
-          <div class="team-name" id="team-nos-name">Nosotros</div>
-          <div class="edit-icon">✏️</div>
-        </div>
+        <div class="team-label-row" onclick="editarEquipo('nos')"><div class="team-name" id="team-nos-name">Nosotros</div><div class="edit-icon">✏️</div></div>
         <div class="score-num" id="score-nos">0</div>
         <div class="section-badge malas-badge">Las malas</div>
         <div class="tally-grid" id="tally-nos-malas"></div>
@@ -263,18 +321,15 @@
           <button class="btn-sub" onclick="addPoint('nos',-1)">−</button>
           <button class="btn-add" onclick="addPoint('nos',1)">+ Punto</button>
         </div>
-        <button class="btn-abandon-falta" onclick="abrirAbandono('nos')">Perdimos por la Falta</button>
-        <button class="btn-abandon-contra" onclick="abrirAbandono('nos')">Perdimos por la Contra</button>
+        <button class="btn-abandon-falta" onclick="abrirAbandono('nos')">Perdimos — Falta Envido</button>
+        <button class="btn-abandon-contra" onclick="abrirAbandono('nos')">Perdimos — Contraflor</button>
       </div>
       <div class="center-col">
         <div class="vs-text">vs</div>
         <button class="btn-vertical" onclick="abrirNuevaPartida()">Nueva</button>
       </div>
       <div class="board-card">
-        <div class="team-label-row" onclick="editarEquipo('ell')">
-          <div class="team-name" id="team-ell-name">Ellos</div>
-          <div class="edit-icon">✏️</div>
-        </div>
+        <div class="team-label-row" onclick="editarEquipo('ell')"><div class="team-name" id="team-ell-name">Ellos</div><div class="edit-icon">✏️</div></div>
         <div class="score-num" id="score-ell">0</div>
         <div class="section-badge malas-badge">Las malas</div>
         <div class="tally-grid" id="tally-ell-malas"></div>
@@ -285,8 +340,8 @@
           <button class="btn-sub" onclick="addPoint('ell',-1)">−</button>
           <button class="btn-add" onclick="addPoint('ell',1)">+ Punto</button>
         </div>
-        <button class="btn-abandon-falta" onclick="abrirAbandono('ell')">Perdimos por la Falta</button>
-        <button class="btn-abandon-contra" onclick="abrirAbandono('ell')">Perdimos por la Contra</button>
+        <button class="btn-abandon-falta" onclick="abrirAbandono('ell')">Perdimos — Falta Envido</button>
+        <button class="btn-abandon-contra" onclick="abrirAbandono('ell')">Perdimos — Contraflor</button>
       </div>
     </div>
   </div>
@@ -294,14 +349,42 @@
   <div class="tab-panel" id="tab-historial">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
       <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);">Historial</div>
-      <button class="btn-danger" onclick="limpiarHistorial()">Borrar todo</button>
+      <button class="btn-danger-outline" onclick="limpiarHistorial()">Borrar local</button>
     </div>
     <div id="historial-lista"></div>
   </div>
 
   <div class="tab-panel" id="tab-ranking">
-    <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);margin-bottom:14px;">Ranking de equipos</div>
+    <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);margin-bottom:4px;">Ranking global</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;" id="ranking-subtitle">Cargando...</div>
     <div id="ranking-lista"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-perfil">
+    <div id="perfil-logged" style="display:none;">
+      <div class="perfil-card">
+        <div class="perfil-avatar" id="perfil-avatar"></div>
+        <div class="perfil-nombre" id="perfil-nombre"></div>
+        <div class="perfil-email" id="perfil-email-text"></div>
+        <div class="perfil-stats">
+          <div class="perfil-stat"><div class="perfil-stat-val" id="stat-partidas">0</div><div class="perfil-stat-label">Partidas</div></div>
+          <div class="perfil-stat"><div class="perfil-stat-val" id="stat-victorias">0</div><div class="perfil-stat-label">Victorias</div></div>
+          <div class="perfil-stat"><div class="perfil-stat-val" id="stat-pct">0%</div><div class="perfil-stat-label">% victorias</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn-danger-outline" onclick="doLogout()">Cerrar sesión</button>
+      </div>
+    </div>
+    <div class="perfil-not-logged" id="perfil-not-logged">
+      <div style="font-size:40px;margin-bottom:12px;">👤</div>
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--celeste-dark);margin-bottom:8px;">Tu perfil</div>
+      <p>Creá una cuenta gratis para guardar tu historial en la nube, ver tus estadísticas y aparecer en el ranking global.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn-primary" onclick="abrirAuth('register')">Crear cuenta</button>
+        <button class="btn-ghost" onclick="abrirAuth('login')">Iniciar sesión</button>
+      </div>
+    </div>
   </div>
 
   <div class="tab-panel" id="tab-reglamento">
@@ -310,198 +393,202 @@
     <div class="no-results" id="no-results">No se encontraron reglas.</div>
   </div>
 
-  <!-- INSTALAR -->
   <div class="tab-panel" id="tab-instalar">
-
     <div style="text-align:center;margin-bottom:20px;">
       <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--celeste-dark);margin-bottom:6px;">Instalá la app</div>
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">Descargala gratis en tu celular y jugá sin necesidad de abrir el navegador.</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">Descargala gratis y jugá sin abrir el navegador.</div>
     </div>
-
-    <!-- ANDROID -->
     <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:14px;padding:18px 16px;margin-bottom:14px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <div style="width:36px;height:36px;background:#3DDC84;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-            <path d="M17.523 15.341a5 5 0 0 1-4.97 4.41 5 5 0 0 1-4.97-4.41H2.5l1.482-8.46A1.5 1.5 0 0 1 5.466 5.5h13.068a1.5 1.5 0 0 1 1.484 1.381L21.5 15.341h-3.977ZM8.5 3l-1.5-2M15.5 3l1.5-2M8 11h.01M16 11h.01"/>
-            <path d="M3 15.341C3 18.45 7.03 21 12 21s9-2.55 9-5.659"/>
-          </svg>
-        </div>
-        <div>
-          <div style="font-weight:600;font-size:15px;color:var(--text);">Android</div>
-          <div style="font-size:11px;color:var(--text-muted);">Con Google Chrome</div>
-        </div>
+        <div style="width:36px;height:36px;background:#3DDC84;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">🤖</div>
+        <div><div style="font-weight:600;font-size:15px;color:var(--text);">Android</div><div style="font-size:11px;color:var(--text-muted);">Con Google Chrome</div></div>
       </div>
-
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">1</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Chrome y entrá al sitio</div>
-            <div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">2</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá los tres puntitos</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">El ícono <strong>⋮</strong> arriba a la derecha de Chrome</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">3</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá "Agregar a pantalla de inicio"</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">O tocá "Instalar app" si aparece el banner automático</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:#3DDC84;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✓</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! El ícono aparece en tu pantalla de inicio</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Se abre sin barras del navegador, como una app real</div>
-          </div>
-        </div>
+        <div class="install-step"><div class="step-num">1</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Chrome y entrá al sitio</div><div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div></div></div>
+        <div class="install-step"><div class="step-num">2</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Tocá los tres puntitos ⋮</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Arriba a la derecha de Chrome</div></div></div>
+        <div class="install-step"><div class="step-num">3</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Tocá "Agregar a pantalla de inicio"</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">O "Instalar app" si aparece el banner automático</div></div></div>
+        <div class="install-step"><div class="step-ok">✓</div><div><div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! Ícono en tu pantalla de inicio</div></div></div>
       </div>
     </div>
-
-    <!-- iOS -->
     <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:14px;padding:18px 16px;margin-bottom:14px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-          </svg>
-        </div>
-        <div>
-          <div style="font-weight:600;font-size:15px;color:var(--text);">iPhone / iPad</div>
-          <div style="font-size:11px;color:var(--text-muted);">Con Safari — obligatorio</div>
-        </div>
+        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">🍎</div>
+        <div><div style="font-weight:600;font-size:15px;color:var(--text);">iPhone / iPad</div><div style="font-size:11px;color:var(--text-muted);">Solo desde Safari</div></div>
       </div>
-
-      <div style="background:#FEF9C3;border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;">
+      <div style="background:#FEF9C3;border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;gap:8px;">
         <div style="font-size:14px;flex-shrink:0;">⚠️</div>
-        <div style="font-size:12px;color:#713F12;line-height:1.5;">En iPhone e iPad la instalación <strong>solo funciona desde Safari</strong>. Chrome y otros navegadores en iOS no permiten instalar apps web.</div>
+        <div style="font-size:12px;color:#713F12;line-height:1.5;">En iPhone la instalación <strong>solo funciona desde Safari</strong>, no desde Chrome.</div>
       </div>
-
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">1</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Safari y entrá al sitio</div>
-            <div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">2</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá el botón de compartir</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">El ícono <strong>□↑</strong> en la barra inferior de Safari</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">3</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Deslizá y tocá "Agregar a pantalla de inicio"</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Puede que tengas que desplazarte en el menú para encontrarlo</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">4</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:var(--text);">Confirmá tocando "Agregar"</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Podés cambiar el nombre antes de confirmar</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="min-width:26px;height:26px;background:#3DDC84;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✓</div>
-          <div>
-            <div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! El ícono aparece en tu pantalla de inicio</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Se abre en pantalla completa sin la interfaz de Safari</div>
-          </div>
-        </div>
+        <div class="install-step"><div class="step-num">1</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Safari y entrá al sitio</div><div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div></div></div>
+        <div class="install-step"><div class="step-num">2</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Tocá el botón compartir □↑</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">En la barra inferior de Safari</div></div></div>
+        <div class="install-step"><div class="step-num">3</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Tocá "Agregar a pantalla de inicio"</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Deslizá en el menú para encontrarlo</div></div></div>
+        <div class="install-step"><div class="step-num">4</div><div><div style="font-size:13px;font-weight:500;color:var(--text);">Confirmá tocando "Agregar"</div></div></div>
+        <div class="install-step"><div class="step-ok">✓</div><div><div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! Se abre en pantalla completa</div></div></div>
       </div>
     </div>
-
-    <!-- Compartir link -->
     <div style="background:var(--celeste-light);border-radius:12px;padding:16px;text-align:center;">
-      <div style="font-size:13px;color:var(--celeste-dark);font-weight:600;margin-bottom:8px;">¿Querés compartirla con otros?</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Mandales el link y que la instalen en su celular</div>
-      <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--celeste-dark);letter-spacing:0.3px;margin-bottom:12px;">
-        trucouruguayo.netlify.app
-      </div>
-      <button onclick="compartirApp()" style="background:var(--celeste-dark);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;touch-action:manipulation;">
-        Compartir link
-      </button>
+      <div style="font-size:13px;color:var(--celeste-dark);font-weight:600;margin-bottom:6px;">¿Querés compartirla?</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Mandales el link a tus compañeros de truco</div>
+      <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--celeste-dark);margin-bottom:12px;">trucouruguayo.netlify.app</div>
+      <button onclick="compartirApp()" class="btn-primary">Compartir link</button>
     </div>
-
   </div>
-
 </main>
+<footer>Truco Uruguayo &mdash; Hecho con orgullo oriental 🇺🇾</footer>
 
-<footer>Truco Uruguayo &mdash; Hecho con orgullo oriental</footer>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,updateDoc,collection,addDoc,query,where,orderBy,limit,getDocs,serverTimestamp,increment}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<script>
-let pts={nos:0,ell:0}, MAX=30, HALF=15;
+const firebaseConfig={apiKey:"AIzaSyBViv5ix7Ik_Nb_xwMaSPc_-QXFxOYyI1g",authDomain:"truco-uruguayo-af917.firebaseapp.com",projectId:"truco-uruguayo-af917",storageBucket:"truco-uruguayo-af917.firebasestorage.app",messagingSenderId:"727404682399",appId:"1:727404682399:web:f01c61bfa756765d4996aa"};
+const fbApp=initializeApp(firebaseConfig);
+const auth=getAuth(fbApp);
+const db=getFirestore(fbApp);
+
+let currentUser=null,pts={nos:0,ell:0},MAX=30,HALF=15;
 let teamNames={nos:'Nosotros',ell:'Ellos'};
-let gameActive=false, editingTeam=null, selectedPts=30, abandoningTeam=null;
-let timerSeconds=0, timerRunning=false, timerInterval=null;
+let gameActive=false,editingTeam=null,selectedPts=30,abandoningTeam=null;
+let timerSeconds=0,timerRunning=false,timerInterval=null;
+
+onAuthStateChanged(auth,async user=>{
+  currentUser=user;
+  actualizarHeaderAuth();
+  if(user){await cargarPerfil(user);renderRanking();}
+  else{renderPerfilNoLogueado();renderRanking();}
+  renderHistorial();
+});
+
+function actualizarHeaderAuth(){
+  const area=document.getElementById('header-auth-area');
+  if(currentUser){
+    const inicial=(currentUser.displayName||currentUser.email||'?')[0].toUpperCase();
+    const nombre=currentUser.displayName||currentUser.email.split('@')[0];
+    area.innerHTML=`<div class="user-badge" onclick="abrirPerfilMenu()"><div class="user-avatar">${inicial}</div><div class="user-name-short">${nombre}</div></div>`;
+  }else{
+    area.innerHTML=`<button class="btn-login-header" onclick="abrirAuth('login')">Ingresar</button>`;
+  }
+}
+
+window.abrirAuth=function(view){
+  switchAuthView(view);
+  ['auth-email','auth-pass','reg-nombre','reg-email','reg-pass'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('auth-error').classList.remove('show');
+  document.getElementById('reg-error').classList.remove('show');
+  document.getElementById('modal-auth').classList.add('open');
+};
+window.switchAuthView=function(view){
+  document.getElementById('auth-login-view').style.display=view==='login'?'block':'none';
+  document.getElementById('auth-register-view').style.display=view==='register'?'block':'none';
+};
+window.doLogin=async function(){
+  const email=document.getElementById('auth-email').value.trim();
+  const pass=document.getElementById('auth-pass').value;
+  const errEl=document.getElementById('auth-error');
+  const btn=document.getElementById('btn-do-login');
+  if(!email||!pass){mostrarError(errEl,'Completá todos los campos');return;}
+  btn.classList.add('btn-loading');btn.textContent='Entrando...';
+  try{await signInWithEmailAndPassword(auth,email,pass);cerrarModal('modal-auth');}
+  catch(e){mostrarError(errEl,tradError(e.code));}
+  finally{btn.classList.remove('btn-loading');btn.textContent='Entrar';}
+};
+window.doRegister=async function(){
+  const nombre=document.getElementById('reg-nombre').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const errEl=document.getElementById('reg-error');
+  const btn=document.getElementById('btn-do-reg');
+  if(!nombre||!email||!pass){mostrarError(errEl,'Completá todos los campos');return;}
+  if(pass.length<6){mostrarError(errEl,'La contraseña debe tener al menos 6 caracteres');return;}
+  btn.classList.add('btn-loading');btn.textContent='Creando...';
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
+    await updateProfile(cred.user,{displayName:nombre});
+    await setDoc(doc(db,'usuarios',cred.user.uid),{nombre,email,partidas:0,victorias:0,createdAt:serverTimestamp()});
+    cerrarModal('modal-auth');
+  }catch(e){mostrarError(errEl,tradError(e.code));}
+  finally{btn.classList.remove('btn-loading');btn.textContent='Crear cuenta';}
+};
+window.doLogout=async function(){
+  await signOut(auth);
+  cerrarModal('modal-perfil-menu');
+  renderPerfilNoLogueado();
+};
+window.abrirPerfilMenu=function(){
+  if(!currentUser)return;
+  document.getElementById('pm-nombre').textContent=currentUser.displayName||'Usuario';
+  document.getElementById('pm-email').textContent=currentUser.email;
+  document.getElementById('modal-perfil-menu').classList.add('open');
+};
+function mostrarError(el,msg){el.textContent=msg;el.classList.add('show');}
+function tradError(code){
+  const m={'auth/user-not-found':'No existe una cuenta con ese email','auth/wrong-password':'Contraseña incorrecta','auth/email-already-in-use':'Ya existe una cuenta con ese email','auth/invalid-email':'El email no es válido','auth/weak-password':'La contraseña es muy débil','auth/invalid-credential':'Email o contraseña incorrectos','auth/too-many-requests':'Demasiados intentos. Intentá más tarde'};
+  return m[code]||'Ocurrió un error. Intentá de nuevo.';
+}
+
+async function cargarPerfil(user){
+  const snap=await getDoc(doc(db,'usuarios',user.uid));
+  const data=snap.exists()?snap.data():{partidas:0,victorias:0};
+  const nombre=user.displayName||user.email.split('@')[0];
+  const p=data.partidas||0,v=data.victorias||0;
+  const pct=p>0?Math.round((v/p)*100):0;
+  document.getElementById('perfil-logged').style.display='block';
+  document.getElementById('perfil-not-logged').style.display='none';
+  document.getElementById('perfil-avatar').textContent=nombre[0].toUpperCase();
+  document.getElementById('perfil-nombre').textContent=nombre;
+  document.getElementById('perfil-email-text').textContent=user.email;
+  document.getElementById('stat-partidas').textContent=p;
+  document.getElementById('stat-victorias').textContent=v;
+  document.getElementById('stat-pct').textContent=pct+'%';
+}
+function renderPerfilNoLogueado(){
+  document.getElementById('perfil-logged').style.display='none';
+  document.getElementById('perfil-not-logged').style.display='block';
+}
 
 function pad(n){return String(n).padStart(2,'0');}
 function updateTimerDisplay(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer-display').textContent=pad(m)+':'+pad(s);}
-function toggleTimer(){if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('btn-timer').textContent='Continuar';}else{timerRunning=true;document.getElementById('btn-timer').textContent='Pausar';timerInterval=setInterval(()=>{timerSeconds++;updateTimerDisplay();},1000);}}
-function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;updateTimerDisplay();document.getElementById('btn-timer').textContent='Iniciar';}
+window.toggleTimer=function(){if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('btn-timer').textContent='Continuar';}else{timerRunning=true;document.getElementById('btn-timer').textContent='Pausar';timerInterval=setInterval(()=>{timerSeconds++;updateTimerDisplay();},1000);}};
+window.resetTimer=function(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;updateTimerDisplay();document.getElementById('btn-timer').textContent='Iniciar';};
 function stopTimer(){clearInterval(timerInterval);timerRunning=false;document.getElementById('btn-timer').textContent='Iniciar';}
 function getDuration(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;return m===0?s+'s':m+'min '+s+'s';}
 
-function cerrarModal(id){document.getElementById(id).classList.remove('open');}
-function abrirNuevaPartida(){
+window.cerrarModal=function(id){document.getElementById(id).classList.remove('open');};
+window.abrirNuevaPartida=function(){
   const banner=document.getElementById('winner-banner');
   if(gameActive&&!banner.classList.contains('show')){if(!confirm('¿Abandonar la partida actual?'))return;}
-  document.getElementById('inp-team1').value='';
-  document.getElementById('inp-team2').value='';
-  selectedPts=30;
-  document.querySelectorAll('.pts-opt').forEach(el=>el.classList.toggle('selected',el.dataset.pts==='30'));
+  document.getElementById('inp-team1').value='';document.getElementById('inp-team2').value='';
+  selectedPts=30;document.querySelectorAll('.pts-opt').forEach(el=>el.classList.toggle('selected',el.dataset.pts==='30'));
   document.getElementById('modal-nueva').classList.add('open');
   setTimeout(()=>document.getElementById('inp-team1').focus(),100);
-}
-function selectPts(n,el){selectedPts=n;document.querySelectorAll('.pts-opt').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');}
-function confirmarNuevaPartida(){
+};
+window.selectPts=function(n,el){selectedPts=n;document.querySelectorAll('.pts-opt').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');};
+window.confirmarNuevaPartida=function(){
   teamNames.nos=document.getElementById('inp-team1').value.trim()||'Nosotros';
   teamNames.ell=document.getElementById('inp-team2').value.trim()||'Ellos';
-  MAX=selectedPts;HALF=MAX/2;
-  cerrarModal('modal-nueva');iniciarJuego();
-}
+  MAX=selectedPts;HALF=MAX/2;cerrarModal('modal-nueva');iniciarJuego();
+};
 function iniciarJuego(){
   pts={nos:0,ell:0};gameActive=true;
   const banner=document.getElementById('winner-banner');
   banner.classList.remove('show');banner.className='winner-banner';
   document.getElementById('team-nos-name').textContent=teamNames.nos;
   document.getElementById('team-ell-name').textContent=teamNames.ell;
-  resetTimer();toggleTimer();render();
+  window.resetTimer();window.toggleTimer();render();
 }
-function editarEquipo(team){
-  editingTeam=team;
-  document.getElementById('inp-edit-team').value=teamNames[team];
-  document.getElementById('modal-edit-team').classList.add('open');
-  setTimeout(()=>document.getElementById('inp-edit-team').focus(),100);
-}
-function confirmarEditTeam(){
-  const val=document.getElementById('inp-edit-team').value.trim();
-  if(val){teamNames[editingTeam]=val;document.getElementById('team-'+editingTeam+'-name').textContent=val;}
-  cerrarModal('modal-edit-team');
-}
-
-function abrirAbandono(team){
+window.editarEquipo=function(team){editingTeam=team;document.getElementById('inp-edit-team').value=teamNames[team];document.getElementById('modal-edit-team').classList.add('open');setTimeout(()=>document.getElementById('inp-edit-team').focus(),100);};
+window.confirmarEditTeam=function(){const val=document.getElementById('inp-edit-team').value.trim();if(val){teamNames[editingTeam]=val;document.getElementById('team-'+editingTeam+'-name').textContent=val;}cerrarModal('modal-edit-team');};
+window.abrirAbandono=function(team){
   const banner=document.getElementById('winner-banner');
   if(banner.classList.contains('show'))return;
   if(!gameActive){alert('Primero iniciá una partida con "+ Nueva".');return;}
   abandoningTeam=team;
   document.getElementById('abandon-title').textContent=teamNames[team]+' abandona';
-  document.getElementById('abandon-desc').textContent='¿Por qué motivo abandona el equipo '+teamNames[team]+'?';
+  document.getElementById('abandon-desc').textContent='¿Por qué motivo abandona '+teamNames[team]+'?';
   document.getElementById('modal-abandon').classList.add('open');
-}
-function confirmarAbandono(motivo){
+};
+window.confirmarAbandono=function(motivo){
   cerrarModal('modal-abandon');
   const ganador=abandoningTeam==='nos'?'ell':'nos';
   stopTimer();
@@ -510,34 +597,22 @@ function confirmarAbandono(motivo){
   banner.textContent='¡'+teamNames[ganador]+' gana! '+teamNames[abandoningTeam]+' abandonó por '+motivoTexto;
   banner.className='winner-banner show '+(motivo==='falta'?'abandon-falta':'abandon-contra');
   if(gameActive){guardarPartida(teamNames[ganador],motivo);gameActive=false;}
-}
+};
 
 function makeTallyRows(container,count,max){
   container.innerHTML='';
-  const numGroups=Math.ceil(max/5);
-  for(let g=0;g<numGroups;g++){
-    const groupStart=g*5;
-    const filled=Math.max(0,Math.min(5,count-groupStart));
-    const row=document.createElement('div');
-    row.className='tally-row';
-    row.appendChild(makeGroupSVG(filled));
-    container.appendChild(row);
+  for(let g=0;g<Math.ceil(max/5);g++){
+    const filled=Math.max(0,Math.min(5,count-g*5));
+    const row=document.createElement('div');row.className='tally-row';
+    row.appendChild(makeGroupSVG(filled));container.appendChild(row);
   }
 }
 function makeGroupSVG(filled){
-  const wrap=document.createElement('div');
-  wrap.style.cssText='display:flex;align-items:center;justify-content:center;';
-  const on='#2A6099', off='#D6E8F8';
-  const c=[filled>=1?on:off, filled>=2?on:off, filled>=3?on:off, filled>=4?on:off, filled>=5?on:off];
+  const wrap=document.createElement('div');wrap.style.cssText='display:flex;align-items:center;justify-content:center;';
+  const on='#2A6099',off='#D6E8F8';
+  const c=[filled>=1?on:off,filled>=2?on:off,filled>=3?on:off,filled>=4?on:off,filled>=5?on:off];
   const S=26,p=3;
-  // izquierdo, inferior, derecho, superior, diagonal
-  wrap.innerHTML=`<svg width="${S+p*2}" height="${S+p*2}" viewBox="0 0 ${S+p*2} ${S+p*2}">
-    <line x1="${p}" y1="${p}" x2="${p}" y2="${p+S}" stroke="${c[0]}" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="${p}" y1="${p+S}" x2="${p+S}" y2="${p+S}" stroke="${c[1]}" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="${p+S}" y1="${p+S}" x2="${p+S}" y2="${p}" stroke="${c[2]}" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="${p+S}" y1="${p}" x2="${p}" y2="${p}" stroke="${c[3]}" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="${p}" y1="${p}" x2="${p+S}" y2="${p+S}" stroke="${c[4]}" stroke-width="2.2" stroke-linecap="round"/>
-  </svg>`;
+  wrap.innerHTML=`<svg width="${S+p*2}" height="${S+p*2}" viewBox="0 0 ${S+p*2} ${S+p*2}"><line x1="${p}" y1="${p}" x2="${p}" y2="${p+S}" stroke="${c[0]}" stroke-width="2.2" stroke-linecap="round"/><line x1="${p}" y1="${p+S}" x2="${p+S}" y2="${p+S}" stroke="${c[1]}" stroke-width="2.2" stroke-linecap="round"/><line x1="${p+S}" y1="${p+S}" x2="${p+S}" y2="${p}" stroke="${c[2]}" stroke-width="2.2" stroke-linecap="round"/><line x1="${p+S}" y1="${p}" x2="${p}" y2="${p}" stroke="${c[3]}" stroke-width="2.2" stroke-linecap="round"/><line x1="${p}" y1="${p}" x2="${p+S}" y2="${p+S}" stroke="${c[4]}" stroke-width="2.2" stroke-linecap="round"/></svg>`;
   return wrap;
 }
 
@@ -545,111 +620,123 @@ function render(){
   document.getElementById('team-nos-name').textContent=teamNames.nos;
   document.getElementById('team-ell-name').textContent=teamNames.ell;
   for(const team of['nos','ell']){
-    const p=pts[team];
-    document.getElementById('score-'+team).textContent=p;
+    const p=pts[team];document.getElementById('score-'+team).textContent=p;
     makeTallyRows(document.getElementById('tally-'+team+'-malas'),Math.min(p,HALF),HALF);
     makeTallyRows(document.getElementById('tally-'+team+'-buenas'),Math.max(0,p-HALF),HALF);
   }
   const banner=document.getElementById('winner-banner');
-  if(!banner.classList.contains('show')){
-    if(pts.nos>=MAX||pts.ell>=MAX){
-      stopTimer();
-      let winner;
-      if(pts.nos>=MAX&&pts.ell>=MAX){banner.textContent='Empate — vuelvan a jugar!';winner='Empate';}
-      else if(pts.nos>=MAX){banner.textContent='¡Ganaron '+teamNames.nos+'!';winner=teamNames.nos;}
-      else{banner.textContent='¡Ganaron '+teamNames.ell+'!';winner=teamNames.ell;}
-      banner.className='winner-banner show win';
-      if(gameActive){guardarPartida(winner,null);gameActive=false;}
-    }
+  if(!banner.classList.contains('show')&&(pts.nos>=MAX||pts.ell>=MAX)){
+    stopTimer();
+    let winner;
+    if(pts.nos>=MAX&&pts.ell>=MAX){banner.textContent='Empate — vuelvan a jugar!';winner='Empate';}
+    else if(pts.nos>=MAX){banner.textContent='¡Ganaron '+teamNames.nos+'!';winner=teamNames.nos;}
+    else{banner.textContent='¡Ganaron '+teamNames.ell+'!';winner=teamNames.ell;}
+    banner.className='winner-banner show win';
+    if(gameActive){guardarPartida(winner,null);gameActive=false;}
   }
 }
-function addPoint(team,delta){
+window.addPoint=function(team,delta){
   if(document.getElementById('winner-banner').classList.contains('show')&&delta>0)return;
   pts[team]=Math.max(0,Math.min(MAX,pts[team]+delta));render();
-}
+};
 
-function guardarPartida(winner,motivo){
+async function guardarPartida(winner,motivo){
+  const dateStr=new Date().toLocaleDateString('es-UY',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const partida={team1:teamNames.nos,team2:teamNames.ell,pts1:pts.nos,pts2:pts.ell,max:MAX,winner,motivo,duration:getDuration(),date:dateStr,cloud:!!currentUser};
   const hist=JSON.parse(localStorage.getItem('truco_hist')||'[]');
-  hist.unshift({team1:teamNames.nos,team2:teamNames.ell,pts1:pts.nos,pts2:pts.ell,max:MAX,winner,motivo,duration:getDuration(),date:new Date().toLocaleDateString('es-UY',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})});
-  localStorage.setItem('truco_hist',JSON.stringify(hist.slice(0,100)));
+  hist.unshift(partida);localStorage.setItem('truco_hist',JSON.stringify(hist.slice(0,100)));
+  if(currentUser){
+    try{
+      await addDoc(collection(db,'partidas'),{uid:currentUser.uid,...partida,timestamp:serverTimestamp()});
+      const ganoNos=winner===teamNames.nos;
+      await updateDoc(doc(db,'usuarios',currentUser.uid),{partidas:increment(1),victorias:increment(ganoNos?1:0)});
+      await cargarPerfil(currentUser);
+    }catch(e){console.error(e);}
+  }
   renderHistorial();renderRanking();
 }
-function motivoBadge(motivo){
-  if(motivo==='falta')return '<div class="hist-abandon-badge-falta">Abandonó — Falta Envido</div>';
-  if(motivo==='contraflor')return '<div class="hist-abandon-badge-contra">Abandonó — Contraflor</div>';
-  return '';
-}
-function renderHistorial(){
-  const hist=JSON.parse(localStorage.getItem('truco_hist')||'[]');
+
+async function renderHistorial(){
   const cont=document.getElementById('historial-lista');
-  if(hist.length===0){cont.innerHTML='<div class="hist-empty">Todavía no hay partidas registradas.<br>¡Jugá una partida para ver el historial!</div>';return;}
+  let hist=JSON.parse(localStorage.getItem('truco_hist')||'[]');
+  if(currentUser){
+    try{
+      const q=query(collection(db,'partidas'),where('uid','==',currentUser.uid),orderBy('timestamp','desc'),limit(50));
+      const snap=await getDocs(q);
+      const cloud=snap.docs.map(d=>({...d.data(),cloud:true}));
+      if(cloud.length>0)hist=cloud;
+    }catch(e){}
+  }
+  if(hist.length===0){cont.innerHTML=`<div class="hist-empty">${currentUser?'No jugaste ninguna partida todavía.':'Todavía no hay partidas registradas.<br>Jugá una partida para ver el historial.'}</div>`;return;}
   cont.innerHTML=hist.map(p=>{
     const loser=p.motivo?(p.winner===p.team1?p.team2:p.team1):null;
-    return`<div class="hist-card"><div class="hist-header"><div class="hist-teams">${p.team1} vs ${p.team2}</div><div class="hist-date">${p.date}</div></div><div class="hist-scores"><div class="hist-score-item"><div class="hist-score-label">${p.team1}</div><div class="hist-score-val">${p.pts1}</div>${p.winner===p.team1?'<div class="hist-winner-badge">Ganador</div>':''}${loser===p.team1?motivoBadge(p.motivo):''}</div><div style="font-size:20px;color:var(--sep);align-self:center;">—</div><div class="hist-score-item"><div class="hist-score-label">${p.team2}</div><div class="hist-score-val">${p.pts2}</div>${p.winner===p.team2?'<div class="hist-winner-badge">Ganador</div>':''}${loser===p.team2?motivoBadge(p.motivo):''}</div></div><div class="hist-meta">Duración: ${p.duration} &bull; A ${p.max} puntos</div></div>`;
+    return`<div class="hist-card"><div class="hist-header"><div class="hist-teams">${p.team1} vs ${p.team2}${p.cloud?'<span class="cloud-badge">☁ nube</span>':''}</div><div class="hist-date">${p.date||''}</div></div><div class="hist-scores"><div class="hist-score-item"><div class="hist-score-label">${p.team1}</div><div class="hist-score-val">${p.pts1}</div>${p.winner===p.team1?'<div class="hist-winner-badge">Ganador</div>':''}${loser===p.team1?motivoBadge(p.motivo):''}</div><div style="font-size:20px;color:var(--sep);align-self:center;">—</div><div class="hist-score-item"><div class="hist-score-label">${p.team2}</div><div class="hist-score-val">${p.pts2}</div>${p.winner===p.team2?'<div class="hist-winner-badge">Ganador</div>':''}${loser===p.team2?motivoBadge(p.motivo):''}</div></div><div class="hist-meta">Duración: ${p.duration||'—'} &bull; A ${p.max} puntos</div></div>`;
   }).join('');
 }
-function limpiarHistorial(){if(!confirm('¿Borrar todo el historial?'))return;localStorage.removeItem('truco_hist');renderHistorial();renderRanking();}
+function motivoBadge(m){if(m==='falta')return'<div class="hist-abandon-badge-falta">Abandonó — Falta Envido</div>';if(m==='contraflor')return'<div class="hist-abandon-badge-contra">Abandonó — Contraflor</div>';return'';}
+window.limpiarHistorial=function(){if(!confirm('¿Borrar el historial local?'))return;localStorage.removeItem('truco_hist');renderHistorial();};
 
-function renderRanking(){
-  const hist=JSON.parse(localStorage.getItem('truco_hist')||'[]');
+async function renderRanking(){
   const cont=document.getElementById('ranking-lista');
-  const teams={};
-  hist.forEach(p=>{[p.team1,p.team2].forEach(t=>{if(!teams[t])teams[t]={wins:0,games:0};teams[t].games++;});if(p.winner&&p.winner!=='Empate'){if(!teams[p.winner])teams[p.winner]={wins:0,games:0};teams[p.winner].wins++;}});
-  const sorted=Object.entries(teams).map(([name,s])=>({name,...s,pct:s.games>0?Math.round((s.wins/s.games)*100):0})).sort((a,b)=>b.pct-a.pct||b.wins-a.wins);
-  if(sorted.length===0){cont.innerHTML='<div class="ranking-empty">El ranking aparece después de la primera partida.</div>';return;}
-  const maxPct=sorted[0].pct||1;
-  cont.innerHTML=sorted.map((t,i)=>`<div class="ranking-card"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-info"><div class="rank-name">${t.name}</div><div class="rank-stats">${t.wins} victorias de ${t.games} partidas</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round((t.pct/maxPct)*100)}%"></div></div></div><div class="rank-pct">${t.pct}%</div></div>`).join('');
+  const sub=document.getElementById('ranking-subtitle');
+  cont.innerHTML='<div class="ranking-empty">Cargando...</div>';
+  try{
+    const q=query(collection(db,'usuarios'),orderBy('victorias','desc'),limit(20));
+    const snap=await getDocs(q);
+    const jugadores=snap.docs.map(d=>d.data()).filter(d=>d.partidas>0);
+    if(jugadores.length===0){sub.textContent='Sé el primero en aparecer';cont.innerHTML='<div class="ranking-empty">El ranking global aparece cuando los jugadores registrados completen su primera partida.</div>';return;}
+    const sorted=[...jugadores].sort((a,b)=>{const pa=a.partidas||0,pb=b.partidas||0,va=a.victorias||0,vb=b.victorias||0,pctA=pa>0?va/pa:0,pctB=pb>0?vb/pb:0;return pctB-pctA||vb-va;});
+    sub.textContent=sorted.length+' jugadores registrados';
+    const maxPct=sorted[0].partidas>0?sorted[0].victorias/sorted[0].partidas:1;
+    cont.innerHTML=sorted.map((j,i)=>{
+      const p=j.partidas||0,v=j.victorias||0,pct=p>0?Math.round((v/p)*100):0;
+      const barW=maxPct>0?Math.round((pct/100/maxPct)*100):0;
+      const esYo=currentUser&&j.email===currentUser.email;
+      return`<div class="ranking-card" style="${esYo?'border-color:var(--celeste-dark);border-width:2px;':''}"><div class="rank-num ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="rank-info"><div class="rank-name">${j.nombre||'Jugador'}${esYo?' <span style="font-size:10px;background:var(--celeste-dark);color:#fff;padding:1px 6px;border-radius:10px;">Vos</span>':''}</div><div class="rank-stats">${v} victorias de ${p} partidas</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${barW}%"></div></div></div><div class="rank-pct">${pct}%</div></div>`;
+    }).join('');
+  }catch(e){sub.textContent='';cont.innerHTML='<div class="ranking-empty">No se pudo cargar el ranking.</div>';}
 }
 
-function switchTab(id,btn){
+window.switchTab=function(id,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
   if(id==='historial')renderHistorial();
   if(id==='ranking')renderRanking();
+  if(id==='perfil'&&currentUser)cargarPerfil(currentUser);
   if(id==='reglamento')renderReglas(REGLAS);
-}
+};
 
 const REGLAS=[
   {icon:'🃏',titulo:'El mazo y la muestra',tags:['baraja','muestra','base'],contenido:`<p>Se juega con la <strong>baraja española de 40 cartas</strong>, sin ochos, nueves ni comodines. Cada jugador recibe <strong>3 cartas</strong> al inicio de cada mano.</p><p>Al terminar el reparto, se levanta una carta del mazo: esa es <strong>la muestra</strong>. Su palo define las <em>piezas</em>, las cartas más poderosas.</p>`},
   {icon:'👑',titulo:'Las piezas — jerarquía',tags:['piezas','jerarquía','muestra','valor'],contenido:`<ul><li><strong>2 de la muestra</strong> — la más alta (30 en envido)</li><li><strong>4 de la muestra</strong> — segunda (29)</li><li><strong>5 de la muestra</strong> — tercera (28)</li><li><strong>Caballo (11)</strong> de la muestra (27)</li><li><strong>Sota (10)</strong> de la muestra (27)</li></ul><p>Si alguna es la muestra, el <strong>Rey (12)</strong> ocupa su lugar.</p>`},
   {icon:'⚔️',titulo:'El truco',tags:['truco','bazas','manos','rondas'],contenido:`<p>Hasta <strong>3 rondas</strong> por mano. Gana quien tire la carta más alta. El equipo que gana <strong>2 de 3</strong> se lleva los puntos.</p><ul><li>Baza parda: gana quien ganó la anterior.</li><li>3 pardas: gana <strong>quien tiene la mano</strong>.</li><li>Se puede <strong>ir al mazo</strong> si las cartas son malas.</li></ul>`},
   {icon:'📣',titulo:'Apuestas del truco',tags:['truco','retruco','vale 4','apuestas'],contenido:`<ul><li><span class="tag tag-pts">1 pto</span> Sin apostar</li><li><span class="tag tag-pts">2 ptos</span> <strong>Truco</strong></li><li><span class="tag tag-pts">3 ptos</span> <strong>Retruco</strong></li><li><span class="tag tag-pts">4 ptos</span> <strong>Vale 4</strong></li></ul><p>Si el rival rechaza, gana los puntos del nivel anterior.</p>`},
-  {icon:'✋',titulo:'El envido',tags:['envido','real envido','falta envido','puntos'],contenido:`<p>Se canta <strong>antes de tirar la primera carta</strong>. Gana quien tenga más puntos.</p><p>Con pieza: su valor + carta más alta no negra. Sin piezas: 20 + dos cartas más altas del mismo palo. Negras (10,11,12 sin ser muestra) = 0.</p><ul><li><span class="tag tag-pts">2 ptos</span> Envido</li><li><span class="tag tag-pts">3 ptos</span> Real Envido</li><li><span class="tag tag-pts">Variable</span> Falta Envido</li></ul>`},
-  {icon:'🌸',titulo:'La flor',tags:['flor','contraflor','piezas'],contenido:`<p>Dos o más piezas; una pieza y dos cartas del mismo palo; o tres del mismo palo. Debés cantarla. Anula el envido. Flor máxima: <strong>47</strong> (2+4+5 de la muestra).</p><ul><li><span class="tag tag-pts">3 ptos</span> Flor sin disputa</li><li>Si ambos tienen flor: se comparan con apuestas adicionales.</li></ul>`},
-  {icon:'🏆',titulo:'Malas y buenas',tags:['puntos','malas','buenas','chico'],contenido:`<p>Partida a <strong>30 o 40 puntos</strong>. Primera mitad: <strong>las malas</strong>. Segunda mitad: <strong>las buenas</strong>. La Falta Envido vale los puntos que le faltan al equipo más cercano de cerrar.</p>`},
-  {icon:'👥',titulo:'Jugadores',tags:['jugadores','equipos','mano'],contenido:`<p>De <strong>2, 4 o 6 jugadores</strong> en dos equipos intercalados. Reparto en sentido <strong>antihorario</strong>. Empieza quien tiene <em>la mano</em> (a la derecha del que reparte).</p>`},
-  {icon:'👁️',titulo:'Las señas',tags:['señas','compañero','estrategia'],contenido:`<p>Gestos para indicar cartas al compañero sin que el rival lo note. <strong>Cerrar los ojos</strong> = mano mala. Se pueden hacer <strong>señas falsas</strong> para engañar.</p>`},
-  {icon:'📐',titulo:'La pri vale oro',tags:['primera','pri','estrategia'],contenido:`<p>Ganar la primera baza es clave: si la segunda es parda, <strong>ganás el truco</strong>. De ahí: <strong>"la pri vale oro"</strong>.</p>`},
-  {icon:'🎭',titulo:'El farol',tags:['engaño','farol','mentir'],contenido:`<p>Podés cantar "Truco" con cartas malas para presionar. <strong>La Flor no se puede mentir</strong>: si la cantás sin tenerla, perdés los puntos automáticamente.</p>`},
-  {icon:'📜',titulo:'Historia',tags:['historia','origen','uruguay'],contenido:`<p>Tiene raíces en el <strong>truc balear</strong>, traído en los siglos XVIII y XIX. Se convirtió en juego de gauchos y pulperías. Hoy es uno de los juegos más populares de Uruguay.</p>`}
+  {icon:'✋',titulo:'El envido',tags:['envido','real envido','falta envido','puntos'],contenido:`<p>Se canta <strong>antes de tirar la primera carta</strong>. Con pieza: su valor + carta más alta no negra. Sin piezas: 20 + dos cartas más altas del mismo palo.</p><ul><li><span class="tag tag-pts">2 ptos</span> Envido</li><li><span class="tag tag-pts">3 ptos</span> Real Envido</li><li><span class="tag tag-pts">Variable</span> Falta Envido</li></ul>`},
+  {icon:'🌸',titulo:'La flor',tags:['flor','contraflor','piezas'],contenido:`<p>Dos o más piezas; una pieza y dos del mismo palo; o tres del mismo palo. Debés cantarla. Anula el envido. Flor máxima: <strong>47</strong>.</p><ul><li><span class="tag tag-pts">3 ptos</span> Flor sin disputa</li><li>Si ambos tienen flor: apuestas adicionales.</li></ul>`},
+  {icon:'🏆',titulo:'Malas y buenas',tags:['puntos','malas','buenas','chico'],contenido:`<p>Partido a <strong>30 o 40 puntos</strong>. Primera mitad: <strong>las malas</strong>. Segunda mitad: <strong>las buenas</strong>.</p>`},
+  {icon:'👥',titulo:'Jugadores',tags:['jugadores','equipos','mano'],contenido:`<p>De <strong>2, 4 o 6 jugadores</strong> en dos equipos intercalados. Reparto en sentido <strong>antihorario</strong>.</p>`},
+  {icon:'👁️',titulo:'Las señas',tags:['señas','compañero','estrategia'],contenido:`<p>Gestos para indicar cartas al compañero. <strong>Cerrar los ojos</strong> = mano mala. Se pueden hacer <strong>señas falsas</strong> para engañar.</p>`},
+  {icon:'📐',titulo:'La pri vale oro',tags:['primera','pri','estrategia'],contenido:`<p>Ganar la primera baza: si la segunda es parda, <strong>ganás el truco</strong>. De ahí: <strong>"la pri vale oro"</strong>.</p>`},
+  {icon:'🎭',titulo:'El farol',tags:['engaño','farol','mentir'],contenido:`<p>Podés cantar "Truco" con cartas malas. <strong>La Flor no se puede mentir</strong>: si la cantás sin tenerla, perdés los puntos.</p>`},
+  {icon:'📜',titulo:'Historia',tags:['historia','origen','uruguay'],contenido:`<p>Tiene raíces en el <strong>truc balear</strong>, traído en los siglos XVIII y XIX. Juego de gauchos y pulperías. Hoy uno de los más populares de Uruguay.</p>`}
 ];
-function renderReglas(lista){
-  const cont=document.getElementById('reglas-lista');
-  const noRes=document.getElementById('no-results');
-  cont.innerHTML='';
-  if(lista.length===0){noRes.style.display='block';return;}
-  noRes.style.display='none';
+window.renderReglas=function(lista){
+  const cont=document.getElementById('reglas-lista'),noRes=document.getElementById('no-results');
+  cont.innerHTML='';if(lista.length===0){noRes.style.display='block';return;}noRes.style.display='none';
   lista.forEach(r=>{const sec=document.createElement('div');sec.className='regla-section';sec.innerHTML=`<div class="regla-header" onclick="toggleRegla(this)"><div class="regla-header-left"><div class="regla-icon">${r.icon}</div><div class="regla-title">${r.titulo}</div></div><div class="regla-chevron">▼</div></div><div class="regla-body">${r.contenido}</div>`;cont.appendChild(sec);});
-}
-function toggleRegla(h){const b=h.nextElementSibling,c=h.querySelector('.regla-chevron');b.classList.toggle('open');c.classList.toggle('open');}
-function filtrarReglas(){const q=document.getElementById('regla-search').value.toLowerCase().trim();renderReglas(!q?REGLAS:REGLAS.filter(r=>r.titulo.toLowerCase().includes(q)||r.tags.some(t=>t.includes(q))||r.contenido.toLowerCase().includes(q)));}
+};
+window.toggleRegla=function(h){const b=h.nextElementSibling,c=h.querySelector('.regla-chevron');b.classList.toggle('open');c.classList.toggle('open');};
+window.filtrarReglas=function(){const q=document.getElementById('regla-search').value.toLowerCase().trim();renderReglas(!q?REGLAS:REGLAS.filter(r=>r.titulo.toLowerCase().includes(q)||r.tags.some(t=>t.includes(q))||r.contenido.toLowerCase().includes(q)));};
 
-function compartirApp(){
-  const datos={title:'Truco Uruguayo',text:'Anotador de Truco Uruguayo — instalalo gratis en tu celular',url:'https://trucouruguayo.netlify.app'};
-  if(navigator.share){navigator.share(datos).catch(()=>{});}
-  else{
-    navigator.clipboard.writeText('https://trucouruguayo.netlify.app').then(()=>{
-      alert('¡Link copiado! Pegalo donde quieras compartirlo.');
-    }).catch(()=>{
-      prompt('Copiá este link:','https://trucouruguayo.netlify.app');
-    });
-  }
-}
+window.compartirApp=function(){
+  const d={title:'Truco Uruguayo',text:'Anotador de Truco Uruguayo — instalalo gratis',url:'https://trucouruguayo.netlify.app'};
+  if(navigator.share){navigator.share(d).catch(()=>{});}
+  else{navigator.clipboard.writeText(d.url).then(()=>alert('¡Link copiado!')).catch(()=>prompt('Copiá este link:',d.url));}
+};
 
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-
-render();renderHistorial();renderRanking();
+if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+render();
 </script>
 </body>
 </html>
