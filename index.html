@@ -233,6 +233,7 @@
   <button class="tab-btn" onclick="switchTab('historial',this)">Historial</button>
   <button class="tab-btn" onclick="switchTab('ranking',this)">Ranking</button>
   <button class="tab-btn" onclick="switchTab('reglamento',this)">Reglamento</button>
+  <button class="tab-btn" onclick="switchTab('instalar',this)">Instalar</button>
 </div>
 
 <main>
@@ -308,6 +309,134 @@
     <div id="reglas-lista"></div>
     <div class="no-results" id="no-results">No se encontraron reglas.</div>
   </div>
+
+  <!-- INSTALAR -->
+  <div class="tab-panel" id="tab-instalar">
+
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--celeste-dark);margin-bottom:6px;">Instalá la app</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">Descargala gratis en tu celular y jugá sin necesidad de abrir el navegador.</div>
+    </div>
+
+    <!-- ANDROID -->
+    <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:14px;padding:18px 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:36px;height:36px;background:#3DDC84;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+            <path d="M17.523 15.341a5 5 0 0 1-4.97 4.41 5 5 0 0 1-4.97-4.41H2.5l1.482-8.46A1.5 1.5 0 0 1 5.466 5.5h13.068a1.5 1.5 0 0 1 1.484 1.381L21.5 15.341h-3.977ZM8.5 3l-1.5-2M15.5 3l1.5-2M8 11h.01M16 11h.01"/>
+            <path d="M3 15.341C3 18.45 7.03 21 12 21s9-2.55 9-5.659"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:15px;color:var(--text);">Android</div>
+          <div style="font-size:11px;color:var(--text-muted);">Con Google Chrome</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Chrome y entrá al sitio</div>
+            <div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá los tres puntitos</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">El ícono <strong>⋮</strong> arriba a la derecha de Chrome</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá "Agregar a pantalla de inicio"</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">O tocá "Instalar app" si aparece el banner automático</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:#3DDC84;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! El ícono aparece en tu pantalla de inicio</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Se abre sin barras del navegador, como una app real</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- iOS -->
+    <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:14px;padding:18px 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:15px;color:var(--text);">iPhone / iPad</div>
+          <div style="font-size:11px;color:var(--text-muted);">Con Safari — obligatorio</div>
+        </div>
+      </div>
+
+      <div style="background:#FEF9C3;border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;">
+        <div style="font-size:14px;flex-shrink:0;">⚠️</div>
+        <div style="font-size:12px;color:#713F12;line-height:1.5;">En iPhone e iPad la instalación <strong>solo funciona desde Safari</strong>. Chrome y otros navegadores en iOS no permiten instalar apps web.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Abrí Safari y entrá al sitio</div>
+            <div style="font-size:12px;color:var(--celeste-dark);margin-top:2px;font-weight:600;">trucouruguayo.netlify.app</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Tocá el botón de compartir</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">El ícono <strong>□↑</strong> en la barra inferior de Safari</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Deslizá y tocá "Agregar a pantalla de inicio"</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Puede que tengas que desplazarte en el menú para encontrarlo</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:var(--celeste-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">4</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);">Confirmá tocando "Agregar"</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Podés cambiar el nombre antes de confirmar</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="min-width:26px;height:26px;background:#3DDC84;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#166534;">¡Listo! El ícono aparece en tu pantalla de inicio</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Se abre en pantalla completa sin la interfaz de Safari</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compartir link -->
+    <div style="background:var(--celeste-light);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:13px;color:var(--celeste-dark);font-weight:600;margin-bottom:8px;">¿Querés compartirla con otros?</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Mandales el link y que la instalen en su celular</div>
+      <div style="background:var(--white);border:1.5px solid var(--celeste);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--celeste-dark);letter-spacing:0.3px;margin-bottom:12px;">
+        trucouruguayo.netlify.app
+      </div>
+      <button onclick="compartirApp()" style="background:var(--celeste-dark);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;touch-action:manipulation;">
+        Compartir link
+      </button>
+    </div>
+
+  </div>
+
 </main>
 
 <footer>Truco Uruguayo &mdash; Hecho con orgullo oriental</footer>
@@ -505,6 +634,18 @@ function renderReglas(lista){
 }
 function toggleRegla(h){const b=h.nextElementSibling,c=h.querySelector('.regla-chevron');b.classList.toggle('open');c.classList.toggle('open');}
 function filtrarReglas(){const q=document.getElementById('regla-search').value.toLowerCase().trim();renderReglas(!q?REGLAS:REGLAS.filter(r=>r.titulo.toLowerCase().includes(q)||r.tags.some(t=>t.includes(q))||r.contenido.toLowerCase().includes(q)));}
+
+function compartirApp(){
+  const datos={title:'Truco Uruguayo',text:'Anotador de Truco Uruguayo — instalalo gratis en tu celular',url:'https://trucouruguayo.netlify.app'};
+  if(navigator.share){navigator.share(datos).catch(()=>{});}
+  else{
+    navigator.clipboard.writeText('https://trucouruguayo.netlify.app').then(()=>{
+      alert('¡Link copiado! Pegalo donde quieras compartirlo.');
+    }).catch(()=>{
+      prompt('Copiá este link:','https://trucouruguayo.netlify.app');
+    });
+  }
+}
 
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
 
